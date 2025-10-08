@@ -1,0 +1,77 @@
+Análisis empírico de la complejidad de los algoritmos de Suma de la subsecuencia máxima 
+-------------------------------------------------------------------------------------------
+										24/09/2025
+
+Autores: Sebastián David Moreno Expósito, Álvaro Gómez García y Xoel Sánchez Dacoba.
+Sujeto de Análisis: Algoritmos sumasubmax1(O(n^2)) y sumaSubMax2(O(n))
+
+-------------------------------------------------------------------------------------------
+
+En este experimento nos disponemos a analizar y demostrar empíricamente la complejidad teórica de los
+algoritmos presentados, cuyo objetivo es en ambos casos la resolución del problema de la subsecuencia 
+de suma máxima, esto es hallar en un vector numérico la suma más grande de cualquier subarreglo contiguo 
+del vector. Para ello analizaremos ambos algoritmos, presentados como sumasubmax1 y sumaSubMax2, de complejidad
+O(n^2) y O(n) respectivamente en casos generados pseudoaleatoriamente. Primeramente se someterán a análisis 
+vectores ya proporcionados en el material para la verificación del correcto funcionamiento de los algoritmos.
+En el experimento se usaron medidas de tiempo del orden de microsegundos(µs).
+
+El entorno físico de análisis se trata de un ordenador personal(PC) de las siguientes características:
+
+CPU:AMD Ryzen 5 3600X 6-Core Processor
+GPU:NVIDIA GeForce RTX 2060
+RAM:32GB
+SO: Windows 10 home version  10.0.19045 N/D Compilation 19045
+
+El entorno virtual es el lenguaje Python en su versión 3.12.10
+
+-------------------------------------------------------------------------------------------
+
+A continuación se exhiben las tablas de tiempos obtenidas para tamaños de entrada n siguiendo una progresión
+geométrica de orden (*2) y sus respectivos análisis.
+Cada tiempo se calculo como el promedio de 1000 ejecuciones como garante de fiabilidad cuando caían
+bajo un umbral mínimo establecido en 1 microsegundo(s).
+
+sumaSubMax2:
+n[-]                             t(n)[µs]       t(n)/n^0.8[µs]          t(n)/n[µs]       t(n)/n^1.2[µs]
+*500                 29.3828              0.2036653629745903   0.0587656            0.016956225118116196
+*1000                58.2608              0.23194042242183188  0.0582608            0.01463445130088934
+*2000                116.8026             0.26707209529123355  0.058401299999999996 0.012770753297796717
+*4000                226.4465             0.29738401422995875  0.056611625          0.010776894290835632
+*8000                461.2608             0.34791612554198625  0.0576576            0.009555173197509105
+*16000               920.7553             0.39888549250173094  0.05754720625        0.008302334904209806
+32000                1837.6               0.45722608538069137  0.057425             0.007212253916471885
+64000                3903.8               0.5578835817855925   0.060996875000000006 0.006669166975405892
+128000               7270.7               0.5967717408587019   0.05680234375        0.005406600270399041
+256000               15133.7              0.7134329251904179   0.059116015625000004 0.00489843288693537
+
+Si (*) -> 't(n)<1000µs' : tiempo promedio de K=1000 ejecuciones.
+
+
+sumaSubMax1:
+n[-]                 t(n)[µs]             t(n)/n^1.8[µs]      t(n)/n^2[µs]         t(n)/n^2.2[µs]
+500                  6050.9               0.08388300262894947  0.0242036            0.006983706288523159
+1000                 23664.6              0.09421046948280287  0.023664599999999997 0.005944278764710154
+2000                 93832.6              0.10727530503869008  0.02345815           0.005129650306974495
+4000                 374167.8             0.12284526627657345  0.0233854875         0.004451787538816587
+8000                 1473165.3            0.13889592489186647  0.0230182078125      0.0038146395678053586
+
+Si (*) -> 't(n)<1000µs' : tiempo promedio de K=1000 ejecuciones.
+
+
+En el caso del algoritmo sumaSubMax2, los cocientes t(n)/n se mantienen prácticamente constantes alrededor de 0.058, lo que indica que la función n es una cota ajustada. La relación con n^0.8 crece de forma sostenida, mientras que la relación con n^1.2 decrece, confirmando que esas cotas corresponden a subestimada y sobrestimada.
+
+En el caso del algoritmo sumaSubMax1, los cocientes t(n)/n² se mantienen estables en torno a 0.023, lo que confirma que la cota ajustada es n². La relación con n^1.8 crece y con n^2.2 decrece, verificando el comportamiento esperado.
+
+-------------------------------------------------------------------------------------------
+
+Discutidos los resultados obtenidos tras el análisis procedemos a extraer la siguiente conclusión: Los resultados experimentales confirman las complejidades teóricas.
+Esto es para sumaSubMax2 la complejidad ajustada es O(n) y para sumaSubMax1, la complejidad ajustada es O(n²).
+
+De este modo, se valida empíricamente que el segundo algoritmo resulta más eficiente para grandes valores de n, tal y como predice el análisis teórico.
+
+
+
+
+
+
+
