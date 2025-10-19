@@ -1,0 +1,202 @@
+Práctica 2: Ordenación por Inserción y Ordenación Shell
+-------------------------------------------------------------------------------------------
+										18/10/2025
+
+Grupo: Sebastián David Moreno Expósito, Álvaro Gómez Garcíay Xoel Sánchez Dacoba
+Sujeto de Análisis: Algoritmos ord_insercion() y ord_shell
+
+-------------------------------------------------------------------------------------------
+
+e1. INTRODUCCIÓN
+------------------------------------------------------------
+En esta práctica se ha implementado y analizado empíricamente el comportamiento temporal de dos algoritmos de ordenación: la Ordenación por Inserción y la Ordenación de Shell. 
+El objetivo es contrastar experimentalmente sus complejidades teóricas en distintos casos de inicialización del vector, así como estudiar el efecto de diferentes secuencias de incrementos en el caso de Shell.
+
+Para cada algoritmo se han obtenido los tiempos de ejecución medios para distintos tamaños de entrada, expresados en microsegundos(µs), verificando que las medidas siguen el comportamiento asintótico esperado y cumplen las normas de verificación empírica (progresión geométrica, cinco o más mediciones, cotas sub y sobrestimadas, etc.).
+
+
+e3. CARACTERÍSTICAS DE LA MÁQUINA
+------------------------------------------------------------
+• Sistema operativo: Windows 11 Home 64 bits
+• Procesador: Intel Core i5-1035G1 @ 1.00GHz
+• Memoria RAM: 8 GB
+• Versión de Python: 3.12.10
+• Módulos utilizados: time, random, typing
+
+
+e4. UNIDADES DE TIEMPO
+------------------------------------------------------------
+Los tiempos medidos se expresan en microsegundos (µs), obtenidos mediante la función 'time.perf_counter_ns()' convertida a microsegundos simplemente dividiendo por 1000. 
+En los casos en que el tiempo medido es menor al umbral de confianza (1000 µs), se aplica una corrección automática promediando K = 1000(potencia 10) ejecuciones. Dichos valores se señalan con un asterisco (*).
+
+
+e5–e6. TAMAÑOS DE ENTRADA Y NÚMERO DE MUESTRAS
+------------------------------------------------------------
+Se ha seguido una **progresión geométrica de razón 2**, partiendo de un tamaño inicial de 500 elementos y realizando 6 mediciones sucesivas:
+n = 500, 1000, 2000, 4000, 8000, 16000.
+
+Cada tabla incluye al menos cinco valores válidos de la progresión geométrica.
+
+
+e7. FORMATO DE LOS DATOS Y PRECISIÓN
+------------------------------------------------------------
+Todos los tiempos se muestran con tres o más cifras significativas. 
+Las columnas incluyen la función de normalización t(n)/n^p para las cotas subestimada, ajustada y sobreestimada.
+
+
+e8–e9–e10–e11. RESULTADOS Y ESTUDIO DE COTAS
+------------------------------------------------------------
+
+==============================
+ORDENACIÓN POR INSERCIÓN
+==============================
+
+
+Caso 1: Inicialización ASCENDENTE (mejor caso)
+------------------------------
+	ord_insercion - caso: ascendente
+
+    n[-]       t(n)[µs]     t(n)/n^0.8[µs]      t(n)/n^1[µs]     t(n)/n^1.2[µs]
+*     500         36.159           0.250634          0.072318          0.0208666
+*    1000         82.336           0.327786          0.082336          0.0206819
+*    2000        166.201           0.380023         0.0831005          0.0181718
+*    4000        300.763           0.394981         0.0751908          0.0143137
+*    8000        613.236           0.462547         0.0766545          0.0127034
+    16000       1036.000           0.448811           0.06475         0.00934148
+
+Nota: Si (*) -> 't(n)<1000' :tiempo promedio de K=1000 ejecuciones.
+
+Cota subestimada: n^0.8    Cota ajustada: 1    Cota sobreestimada: 1.2
+Teóricamente se espera un comportamiento lineal Θ(n), ya que cada elemento se inserta directamente en su posición sin desplazamientos significativos.
+
+
+Caso 2: Inicialización DESCENDENTE (peor caso)
+------------------------------
+	ord_insercion - caso: descendente
+
+    n[-]       t(n)[µs]     t(n)/n^1.8[µs]    t(n)/n^2.0[µs]     t(n)/n^2.2[µs]
+      500       5830.000          0.0808207           0.02332         0.00672875
+     1000      35553.000           0.141539          0.035553         0.00893051
+     2000     113779.000           0.130079         0.0284448         0.00622008
+     4000     469284.000           0.154073         0.0293302         0.00558346
+     8000    1878920.000           0.177152         0.0293581         0.00486531
+    16000    7577997.000           0.205182         0.0296016         0.00427062
+
+Nota: Si (*) -> 't(n)<1000' :tiempo promedio de K=1000 ejecuciones.
+
+Cota subestimada: n^1.8    Cota ajustada: n^2    Cota sobreestimada: n^2.2
+En este caso cada inserción requiere desplazar todos los elementos previos. Se espera un comportamiento cuadrático Θ(n²).
+
+
+Caso 3: Inicialización ALEATORIA (caso medio)
+------------------------------------------------------------
+	ord_insercion - caso: aleatorio
+
+    n[-]       t(n)[µs]     t(n)/n^1.8[µs]    t(n)/n^2.0[µs]     t(n)/n^2.2[µs]
+      500       3588.000          0.0497401          0.014352         0.00414113
+     1000      14528.000           0.057837          0.014528         0.00364927
+     2000      60674.000          0.0693663         0.0151685         0.00331693
+     4000     301947.000           0.099134         0.0188717         0.00359252
+     8000    1126560.000           0.106217         0.0176025         0.00291713
+    16000    3850980.000           0.104269         0.0150429         0.00217024
+
+Nota: Si (*) -> 't(n)<1000' :tiempo promedio de K=1000 ejecuciones.
+
+Cota subestimada: n^1.8    Cota ajustada: n^2    Cota sobreestimada: n^2.2
+El número medio de inversiones es proporcional a n², por lo que el tiempo medio también presenta crecimiento Θ(n²).
+
+
+==============================
+ORDENACIÓN DE SHELL
+==============================
+
+Caso 4: Secuencia de incrementos de Hibbard
+------------------------------------------------------------
+	ord_shell - caso: seq_hibbard
+
+    n[-]       t(n)[µs]    t(n)/n^1.15[µs]   t(n)/n^1.22[µs]    t(n)/n^1.33[µs]
+*     500        484.294           0.381324          0.246812           0.124589
+*    1000       1160.941           0.411917          0.253986           0.118798
+     2000       2247.000           0.359268          0.211031          0.0914604
+     4000       5990.000           0.431577          0.241498          0.0969811
+     8000      15613.000           0.506912          0.270219           0.100549
+    16000      31915.000           0.466935           0.23712          0.0817552
+
+Nota: Si (*) -> 't(n)<1000' :tiempo promedio de K=1000 ejecuciones.
+
+Cota subestimada: n^1.15    Cota ajustada: n^1.22    Cota sobreestimada: n^1.33
+Esperamos un comportamiento empírico entre Θ(n^{1.15}) y Θ(n^{1.35}), mejorando respecto a la inserción simple.
+
+Caso 5: Secuencia de incrementos de Knuth
+------------------------------------------------------------
+	ord_shell - caso: seq_knuth
+    n[-]       t(n)[µs]    t(n)/n^1.15[µs]   t(n)/n^1.21[µs]    t(n)/n^1.34[µs]
+*     500        447.747           0.352547          0.242817           0.108246
+*    1000       1109.112           0.393528          0.260001           0.105919
+     2000       2880.000           0.460477          0.291841           0.108646
+     4000       5993.000           0.431793          0.262514          0.0893067
+     8000      14996.000            0.48688          0.283947          0.0882744
+    16000      32646.000            0.47763          0.267205          0.0759118
+
+Nota: Si (*) -> 't(n)<1000' :tiempo promedio de K=1000 ejecuciones.
+
+Cota subestimada: n^1.15    Cota ajustada: n^1.21    Cota sobreestimada: n^1.34
+La secuencia de Knuth presenta uno de los rendimientos más regulares, con tiempos próximos a Θ(n^{1.2-1.29}).
+
+Caso 6: Secuencia de incrementos de Sedgewick
+------------------------------------------------------------
+	ord_shell - caso: seq_sedgewick
+    n[-]       t(n)[µs]    t(n)/n^1.15[µs]   t(n)/n^1.23[µs]    t(n)/n^1.32[µs]
+*     500        712.105           0.560697          0.341044           0.194941
+     1000       1409.000           0.499932          0.287681           0.154494
+     2000       3963.000           0.633636          0.344951           0.174046
+     4000      10218.000           0.736202          0.379168           0.179741
+     8000      18609.000           0.604184           0.29439           0.131113
+    16000      48291.000           0.706526          0.325686           0.136279
+
+Nota: Si (*) -> 't(n)<1000' :tiempo promedio de K=1000 ejecuciones.
+
+Cota subestimada: n^1.15    Cota ajustada: n^1.23    Cota sobreestimada: n^1.32
+De acuerdo con la teoría, esta secuencia logra uno de los mejores rendimientos esperados (Θ(n^{1.23})).
+
+Caso 7: Secuencia de incrementos de Ciura
+------------------------------------------------------------
+	ord_shell - caso: seq_ciura
+    n[-]       t(n)[µs]     t(n)/n^1.1[µs]    t(n)/n^1.2[µs]     t(n)/n^1.3[µs]
+*     500        418.981           0.450119          0.241786           0.129877
+*    1000        993.730           0.498045          0.249614           0.125103
+     2000       2179.000           0.509477          0.238244           0.111408
+     4000       4787.000           0.522153           0.22782          0.0993998
+     8000      10587.000           0.538733          0.219313          0.0892804
+    16000      24246.000           0.575583          0.218623          0.0830394
+
+Nota: Si (*) -> 't(n)<1000' :tiempo promedio de K=1000 ejecuciones.
+
+Cota subestimada: n^1.1    Cota ajustada: n^1.2    Cota sobreestimada: n^1.3
+La secuencia de Ciura, extendida multiplicando por 2.25, suele ofrecer resultados empíricos excelentes, próximos a Θ(n^{1.2}).
+
+
+
+e12. OBSERVACIONES Y MEDICIONES ANÓMALAS
+------------------------------------------------------------
+Las mediciones se han repetido varias veces para descartar resultados anómalos. 
+No se observaron tiempos negativos ni oscilaciones irregulares fuera del margen esperado. 
+Los casos marcados con (*) indican tiempos promediados por debajo del umbral de confianza, medidos mediante 1000 repeticiones
+y ademas se restan el tiempo de generar los 1000 vectores aleatorios en esas repeticiones para mayor precision.
+
+
+
+e2. CONCLUSIONES
+------------------------------------------------------------
+Los resultados experimentales son coherentes con la teoría:
+
+• Ordenación por Inserción: 
+  - Mejor caso (ascendente): comportamiento lineal Θ(n).
+  - Peor y medio caso (descendente y aleatorio): comportamiento cuadrático Θ(n²).
+
+• Ordenación de Shell: 
+  - Todas las secuencias de incrementos mejoran significativamente la inserción directa con incremento 1, es decir, con insertion_sort.
+  - Las secuencias de Sedgewick y Ciura ofrecen los mejores tiempos, próximos a Θ(n^{1.24}).
+  - Se confirma que los incrementos influyen directamente en la eficiencia y que el rendimiento mejora al reducir el número de comparaciones y desplazamientos en cada fase.
+
+En conjunto, las mediciones validan las complejidades teóricas y la correcta implementación de los algoritmos, cumpliendo con los requisitos de la práctica.
