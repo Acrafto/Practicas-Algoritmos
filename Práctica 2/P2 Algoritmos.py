@@ -420,3 +420,5 @@ if __name__ == "__main__":
                                  nombre)
 
     print("\n--- FIN MEDICIONES ---")
+
+    Putas mierdas jajaja
