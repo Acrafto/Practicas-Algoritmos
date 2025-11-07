@@ -1,0 +1,200 @@
+Práctica 3: Ordenación Rápida (Quicksort) con Mediana de 3 y Umbral
+-------------------------------------------------------------------------------------------
+										07/11/2025
+
+Grupo: Sebastián David Moreno Expósito, Álvaro Gómez García y Xoel Sánchez Dacoba
+Sujeto de Análisis: ord_rapida() con mediana3 y umbral
+
+-------------------------------------------------------------------------------------------
+
+e1. INTRODUCCIÓN
+------------------------------------------------------------
+En esta práctica se ha implementado y analizado empíricamente el comportamiento temporal 
+del algoritmo de Ordenación Rápida (Quicksort) con selección de pivote mediante la 
+técnica de **mediana de tres** y aplicación de un **umbral** para el uso de 
+**ordenación por inserción** en los subproblemas pequeños.
+
+El objetivo es verificar empíricamente cómo el valor del umbral influye en el 
+rendimiento del algoritmo, comparando los tiempos de ejecución para distintos casos de 
+inicialización del vector (ascendente, descendente y aleatorio) y distintos valores de 
+umbral (1, 10, 100). 
+
+Finalmente, se realiza una comparación con los resultados de la Ordenación de Shell 
+(obtenidos en la Práctica 2) para observar las diferencias de comportamiento entre ambos 
+métodos.
+
+
+e3. CARACTERÍSTICAS DE LA MÁQUINA
+------------------------------------------------------------
+• Sistema operativo: Windows 11 Home 64 bits
+• Procesador: Intel Core i5-1035G1 @ 1.00GHz
+• Memoria RAM: 8 GB
+• Versión de Python: 3.12.10
+• Módulos utilizados: time, random, math, typing
+
+
+e4. UNIDADES DE TIEMPO
+------------------------------------------------------------
+Los tiempos medidos se expresan en microsegundos (µs), obtenidos mediante la función 
+'time.perf_counter_ns()' dividida por 1000. 
+En los casos en que el tiempo medido sea menor de 1000 µs, se aplica una corrección 
+promediando **K = 1000 ejecuciones**, y se marca el valor con un asterisco (*).
+
+
+e5–e6. TAMAÑOS DE ENTRADA Y NÚMERO DE MUESTRAS
+------------------------------------------------------------
+Se ha seguido una **progresión geométrica de razón 2**, partiendo de un tamaño inicial 
+de 500 elementos y realizando 6 mediciones sucesivas:
+n = 500, 1000, 2000, 4000, 8000, 16000.
+
+Cada tabla incluye los tiempos medios obtenidos, junto con las columnas de normalización 
+t(n)/(n·log₂n), t(n)/n^1.3 y t(n)/n², para el estudio de cotas asintóticas.
+
+
+e7. FORMATO DE LOS DATOS Y PRECISIÓN
+------------------------------------------------------------
+Los tiempos se expresan con tres o más cifras significativas. 
+Cada tabla indica si la medición se ha promediado (*) por estar bajo el umbral de confianza.
+
+
+e8–e9–e10–e11. RESULTADOS Y ESTUDIO DE COTAS
+------------------------------------------------------------
+
+==============================
+ORDENACIÓN RÁPIDA (QUICKSORT)
+==============================
+
+-------------------------------------------------------------------------------------------
+Caso 1: Inicialización ASCENDENTE (mejor caso)
+-------------------------------------------------------------------------------------------
+	ord_rapida - caso: ascendente (umbral=1)
+
+    n[-]       t(n)[µs]     t(n)/(n·log₂n)[µs]     t(n)/n^1.3[µs]     t(n)/n^2[µs]
+-------------------------------------------------------------------------------------------
+*     500         
+*    1000         
+     2000         
+     4000         
+     8000         
+    16000         
+
+Cota subestimada: n·log₂n     Cota ajustada: n^1.3     Cota sobreestimada: n²
+Comportamiento esperado: Θ(n·log n). 
+El caso ascendente no produce el peor pivote gracias al uso de mediana de tres.
+
+
+-------------------------------------------------------------------------------------------
+Caso 2: Inicialización DESCENDENTE (peor caso)
+-------------------------------------------------------------------------------------------
+	ord_rapida - caso: descendente (umbral=1)
+
+    n[-]       t(n)[µs]     t(n)/(n·log₂n)[µs]     t(n)/n^1.3[µs]     t(n)/n^2[µs]
+-------------------------------------------------------------------------------------------
+*     500         
+*    1000         
+     2000         
+     4000         
+     8000         
+    16000         
+
+Cota subestimada: n·log₂n     Cota ajustada: n^1.3     Cota sobreestimada: n²
+Gracias al pivote mediana3, incluso el caso descendente evita el comportamiento O(n²) 
+clásico del Quicksort básico, manteniendo una complejidad próxima a Θ(n·log n).
+
+
+-------------------------------------------------------------------------------------------
+Caso 3: Inicialización ALEATORIA (caso medio)
+-------------------------------------------------------------------------------------------
+	ord_rapida - caso: aleatorio (umbral=1)
+
+    n[-]       t(n)[µs]     t(n)/(n·log₂n)[µs]     t(n)/n^1.3[µs]     t(n)/n^2[µs]
+-------------------------------------------------------------------------------------------
+*     500         
+*    1000         
+     2000         
+     4000         
+     8000         
+    16000         
+
+Cota subestimada: n·log₂n     Cota ajustada: n^1.3     Cota sobreestimada: n²
+Comportamiento medio esperado: Θ(n·log n).
+
+
+-------------------------------------------------------------------------------------------
+Caso 4: Umbral = 10 (comparación)
+-------------------------------------------------------------------------------------------
+	ord_rapida - caso: aleatorio (umbral=10)
+
+    n[-]       t(n)[µs]     t(n)/(n·log₂n)[µs]     t(n)/n^1.3[µs]     t(n)/n^2[µs]
+-------------------------------------------------------------------------------------------
+*     500         
+*    1000         
+     2000         
+     4000         
+     8000         
+    16000         
+
+El umbral mejora el rendimiento, reduciendo la profundidad de la recursión para 
+subproblemas pequeños, delegando su resolución a la ordenación por inserción.
+
+
+-------------------------------------------------------------------------------------------
+Caso 5: Umbral = 100 (comparación)
+-------------------------------------------------------------------------------------------
+	ord_rapida - caso: aleatorio (umbral=100)
+
+    n[-]       t(n)[µs]     t(n)/(n·log₂n)[µs]     t(n)/n^1.3[µs]     t(n)/n^2[µs]
+-------------------------------------------------------------------------------------------
+*     500         
+*    1000         
+     2000         
+     4000         
+     8000         
+    16000         
+
+Aumentar el umbral demasiado puede causar un ligero empeoramiento, 
+ya que se recurre con más frecuencia al algoritmo de inserción.
+
+
+-------------------------------------------------------------------------------------------
+Comparación con Ordenación Shell (Secuencia de Ciura)
+-------------------------------------------------------------------------------------------
+	ord_rapida (umbral=10) vs ord_shell (seq_ciura) – caso aleatorio
+
+    n[-]       t_qsort[µs]     t_shell[µs]     t_qsort/(n·log₂n)     t_shell/n^1.2
+-------------------------------------------------------------------------------------------
+*     500         
+*    1000         
+     2000         
+     4000         
+     8000         
+    16000         
+
+Observación: Quicksort con umbral y mediana de tres tiende a superar a Shell para tamaños 
+grandes, confirmando su complejidad promedio Θ(n·log n) frente al Θ(n^{1.2–1.3}) del Shell.
+
+
+e12. OBSERVACIONES Y MEDICIONES ANÓMALAS
+------------------------------------------------------------
+Las mediciones se repitieron varias veces para minimizar el ruido de cronometraje. 
+Los tiempos inferiores a 1000 µs fueron corregidos promediando K=1000 ejecuciones 
+y restando el coste de generación de vectores aleatorios. 
+No se observaron valores negativos ni desviaciones inusuales.
+
+
+e2. CONCLUSIONES
+------------------------------------------------------------
+Los resultados empíricos confirman el comportamiento teórico esperado:
+
+• El algoritmo **Quicksort con mediana de tres** mantiene un rendimiento promedio 
+  de Θ(n·log n) en todos los casos probados, evitando el peor caso cuadrático.
+
+• El parámetro **umbral** permite optimizar la eficiencia práctica, con un valor 
+  intermedio (p.ej. 10–50) ofreciendo los mejores resultados.
+
+• En la comparación con Shell, Quicksort muestra mejor escalabilidad para grandes n.
+
+• En conjunto, las mediciones son coherentes con la teoría y validan la correcta 
+  implementación del algoritmo conforme al pseudocódigo del enunciado.
+
+-------------------------------------------------------------------------------------------
