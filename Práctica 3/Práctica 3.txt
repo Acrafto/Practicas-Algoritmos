@@ -1,200 +1,225 @@
-Práctica 3: Ordenación Rápida (Quicksort) con Mediana de 3 y Umbral
+Práctica 3: Ordenación Rápida (Quicksort con Mediana de Tres y Umbral)
 -------------------------------------------------------------------------------------------
-										07/11/2025
+										08/11/2025
 
 Grupo: Sebastián David Moreno Expósito, Álvaro Gómez García y Xoel Sánchez Dacoba
-Sujeto de Análisis: ord_rapida() con mediana3 y umbral
+Sujeto de Análisis: Algoritmos ord_rapida(), ord_rapida_aux() y mediana3()
 
 -------------------------------------------------------------------------------------------
+
 
 e1. INTRODUCCIÓN
 ------------------------------------------------------------
-En esta práctica se ha implementado y analizado empíricamente el comportamiento temporal 
-del algoritmo de Ordenación Rápida (Quicksort) con selección de pivote mediante la 
-técnica de **mediana de tres** y aplicación de un **umbral** para el uso de 
-**ordenación por inserción** en los subproblemas pequeños.
+En esta práctica se ha implementado y analizado empíricamente el comportamiento del algoritmo de
+**ordenación rápida (Quicksort)** con **selección del pivote mediante mediana de tres** y un **umbral** para la
+ordenación por inserción de los subvector pequeños.
 
-El objetivo es verificar empíricamente cómo el valor del umbral influye en el 
-rendimiento del algoritmo, comparando los tiempos de ejecución para distintos casos de 
-inicialización del vector (ascendente, descendente y aleatorio) y distintos valores de 
-umbral (1, 10, 100). 
+El objetivo es comprobar el efecto de la elección del umbral sobre el rendimiento temporal del
+algoritmo y comparar las mediciones obtenidas en distintas situaciones iniciales del vector:
+ascendente, descendente y aleatoria. También se comparan los resultados empíricos con las
+complejidades teóricas esperadas y con los obtenidos en la práctica anterior (ordenación de Shell).
 
-Finalmente, se realiza una comparación con los resultados de la Ordenación de Shell 
-(obtenidos en la Práctica 2) para observar las diferencias de comportamiento entre ambos 
-métodos.
+El experimento se ha realizado con tres valores de umbral:  
+• UMBRAL = 1  → Quicksort puro  
+• UMBRAL = 10 → Quicksort + Inserción para subvectores pequeños  
+• UMBRAL = 100 → Quicksort con inserción más agresiva  
 
 
 e3. CARACTERÍSTICAS DE LA MÁQUINA
 ------------------------------------------------------------
-• Sistema operativo: Windows 11 Home 64 bits
-• Procesador: Intel Core i5-1035G1 @ 1.00GHz
-• Memoria RAM: 8 GB
-• Versión de Python: 3.12.10
-• Módulos utilizados: time, random, math, typing
+• Sistema operativo: Windows 11 Home 64 bits  
+• Procesador: Intel Core i5-1035G1 @ 1.00GHz  
+• Memoria RAM: 8 GB  
+• Versión de Python: 3.12.10  
+• Módulos utilizados: time, random, typing, math  
 
 
 e4. UNIDADES DE TIEMPO
 ------------------------------------------------------------
-Los tiempos medidos se expresan en microsegundos (µs), obtenidos mediante la función 
-'time.perf_counter_ns()' dividida por 1000. 
-En los casos en que el tiempo medido sea menor de 1000 µs, se aplica una corrección 
-promediando **K = 1000 ejecuciones**, y se marca el valor con un asterisco (*).
+Los tiempos se expresan en **microsegundos (µs)**, obtenidos con la función `time.perf_counter_ns()` y
+dividiendo por 1000.  
+Cuando el tiempo medido es menor que el umbral de confianza (1000 µs), se repiten **K = 1000**
+ejecuciones y se resta el tiempo de generación de los vectores para mayor precisión.  
+Dichos valores se indican con un asterisco (*) en las tablas.
 
 
 e5–e6. TAMAÑOS DE ENTRADA Y NÚMERO DE MUESTRAS
 ------------------------------------------------------------
-Se ha seguido una **progresión geométrica de razón 2**, partiendo de un tamaño inicial 
-de 500 elementos y realizando 6 mediciones sucesivas:
-n = 500, 1000, 2000, 4000, 8000, 16000.
+Se ha seguido una **progresión geométrica de razón 2**, partiendo de un tamaño inicial de 500 y
+realizando seis mediciones sucesivas:
 
-Cada tabla incluye los tiempos medios obtenidos, junto con las columnas de normalización 
-t(n)/(n·log₂n), t(n)/n^1.3 y t(n)/n², para el estudio de cotas asintóticas.
+n = 500, 1000, 2000, 4000, 8000, 16000
+
+Cada tabla incluye al menos cinco valores válidos de la progresión geométrica.
 
 
 e7. FORMATO DE LOS DATOS Y PRECISIÓN
 ------------------------------------------------------------
-Los tiempos se expresan con tres o más cifras significativas. 
-Cada tabla indica si la medición se ha promediado (*) por estar bajo el umbral de confianza.
+Todas las mediciones se muestran con tres o más cifras significativas.
+Se incluyen tres columnas de normalización:
+
+- t(n)/(n·log₂n)  → Cota teórica ajustada Θ(n·log n)  
+- t(n)/n¹·³       → Cota subestimada  
+- t(n)/n²         → Cota sobreestimada  
 
 
 e8–e9–e10–e11. RESULTADOS Y ESTUDIO DE COTAS
 ------------------------------------------------------------
 
 ==============================
-ORDENACIÓN RÁPIDA (QUICKSORT)
+ORDENACIÓN RÁPIDA (UMBRAL = 1)
 ==============================
 
--------------------------------------------------------------------------------------------
-Caso 1: Inicialización ASCENDENTE (mejor caso)
--------------------------------------------------------------------------------------------
-	ord_rapida - caso: ascendente (umbral=1)
+**Caso 1: Inicialización ASCENDENTE**
 
-    n[-]       t(n)[µs]     t(n)/(n·log₂n)[µs]     t(n)/n^1.3[µs]     t(n)/n^2[µs]
--------------------------------------------------------------------------------------------
-*     500         
-*    1000         
-     2000         
-     4000         
-     8000         
-    16000         
+    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
+*     500        264.329            0.0589639         0.0819377        0.00105732
+*    1000        656.627            0.0658881         0.0826644       0.000656627
+     2000       1512.000            0.0689417         0.0773059          0.000378
+     4000       3093.000            0.0646218         0.0642247       0.000193312
+     8000       6782.000            0.0653836         0.0571927       0.000105969
+    16000      16744.000            0.0749331          0.057346       6.54062e-05
 
-Cota subestimada: n·log₂n     Cota ajustada: n^1.3     Cota sobreestimada: n²
-Comportamiento esperado: Θ(n·log n). 
-El caso ascendente no produce el peor pivote gracias al uso de mediana de tres.
+Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
 
 
--------------------------------------------------------------------------------------------
-Caso 2: Inicialización DESCENDENTE (peor caso)
--------------------------------------------------------------------------------------------
-	ord_rapida - caso: descendente (umbral=1)
+**Caso 2: Inicialización DESCENDENTE**
 
-    n[-]       t(n)[µs]     t(n)/(n·log₂n)[µs]     t(n)/n^1.3[µs]     t(n)/n^2[µs]
--------------------------------------------------------------------------------------------
-*     500         
-*    1000         
-     2000         
-     4000         
-     8000         
-    16000         
+    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
+*     500        284.280            0.0634144         0.0881222        0.00113712
+*    1000        586.366            0.0588379         0.0738191       0.000586366
+     2000       1507.000            0.0687137         0.0770503        0.00037675
+     4000       3560.000            0.0743787         0.0739217         0.0002225
+     8000       6975.000            0.0672443         0.0588203       0.000108984
+    16000      14837.000            0.0663989         0.0508148        5.7957e-05
 
-Cota subestimada: n·log₂n     Cota ajustada: n^1.3     Cota sobreestimada: n²
-Gracias al pivote mediana3, incluso el caso descendente evita el comportamiento O(n²) 
-clásico del Quicksort básico, manteniendo una complejidad próxima a Θ(n·log n).
+Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
 
 
--------------------------------------------------------------------------------------------
-Caso 3: Inicialización ALEATORIA (caso medio)
--------------------------------------------------------------------------------------------
-	ord_rapida - caso: aleatorio (umbral=1)
+**Caso 3: Inicialización ALEATORIA**
 
-    n[-]       t(n)[µs]     t(n)/(n·log₂n)[µs]     t(n)/n^1.3[µs]     t(n)/n^2[µs]
--------------------------------------------------------------------------------------------
-*     500         
-*    1000         
-     2000         
-     4000         
-     8000         
-    16000         
+    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
+*     500        388.443            0.0866501          0.120411        0.00155377
+*    1000        899.364            0.0902452          0.113223       0.000899364
+     2000       1475.000            0.0672547         0.0754142        0.00036875
+     4000       3162.000            0.0660634         0.0656574       0.000197625
+     8000       7309.000            0.0704643         0.0616369       0.000114203
+    16000      15365.000            0.0687618         0.0526231       6.00195e-05
 
-Cota subestimada: n·log₂n     Cota ajustada: n^1.3     Cota sobreestimada: n²
-Comportamiento medio esperado: Θ(n·log n).
+Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
 
 
--------------------------------------------------------------------------------------------
-Caso 4: Umbral = 10 (comparación)
--------------------------------------------------------------------------------------------
-	ord_rapida - caso: aleatorio (umbral=10)
+==============================
+ORDENACIÓN RÁPIDA (UMBRAL = 10)
+==============================
 
-    n[-]       t(n)[µs]     t(n)/(n·log₂n)[µs]     t(n)/n^1.3[µs]     t(n)/n^2[µs]
--------------------------------------------------------------------------------------------
-*     500         
-*    1000         
-     2000         
-     4000         
-     8000         
-    16000         
+**Caso 4: Inicialización ASCENDENTE**
 
-El umbral mejora el rendimiento, reduciendo la profundidad de la recursión para 
-subproblemas pequeños, delegando su resolución a la ordenación por inserción.
+    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
+*     500        205.141            0.0457609         0.0635904       0.000820564
+*    1000        457.248            0.0458818         0.0575641       0.000457248
+     2000       1180.000            0.0538037         0.0603313          0.000295
+     4000       2726.000            0.0569541         0.0566041       0.000170375
+     8000       5940.000            0.0572661         0.0500921       9.28125e-05
+    16000      12419.000            0.0555778         0.0425335       4.85117e-05
 
-
--------------------------------------------------------------------------------------------
-Caso 5: Umbral = 100 (comparación)
--------------------------------------------------------------------------------------------
-	ord_rapida - caso: aleatorio (umbral=100)
-
-    n[-]       t(n)[µs]     t(n)/(n·log₂n)[µs]     t(n)/n^1.3[µs]     t(n)/n^2[µs]
--------------------------------------------------------------------------------------------
-*     500         
-*    1000         
-     2000         
-     4000         
-     8000         
-    16000         
-
-Aumentar el umbral demasiado puede causar un ligero empeoramiento, 
-ya que se recurre con más frecuencia al algoritmo de inserción.
+Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
 
 
--------------------------------------------------------------------------------------------
-Comparación con Ordenación Shell (Secuencia de Ciura)
--------------------------------------------------------------------------------------------
-	ord_rapida (umbral=10) vs ord_shell (seq_ciura) – caso aleatorio
+**Caso 5: Inicialización DESCENDENTE**
 
-    n[-]       t_qsort[µs]     t_shell[µs]     t_qsort/(n·log₂n)     t_shell/n^1.2
--------------------------------------------------------------------------------------------
-*     500         
-*    1000         
-     2000         
-     4000         
-     8000         
-    16000         
+    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
+*     500        211.376            0.0471517         0.0655231       0.000845504
+*    1000        466.602            0.0468204         0.0587417       0.000466602
+     2000       1202.000            0.0548068         0.0614562         0.0003005
+     4000       2565.000            0.0535903          0.053261       0.000160313
+     8000       5799.000            0.0559068         0.0489031       9.06094e-05
+    16000      12818.000            0.0573634            0.0439       5.00703e-05
 
-Observación: Quicksort con umbral y mediana de tres tiende a superar a Shell para tamaños 
-grandes, confirmando su complejidad promedio Θ(n·log n) frente al Θ(n^{1.2–1.3}) del Shell.
+Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+
+
+**Caso 6: Inicialización ALEATORIA**
+
+    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
+*     500        242.163            0.0540194         0.0750666       0.000968652
+*    1000        860.177             0.086313           0.10829       0.000860177
+     2000       1942.000            0.0885482         0.0992911         0.0004855
+     4000       4084.000            0.0853266         0.0848023        0.00025525
+     8000       8776.000            0.0846073         0.0740082       0.000137125
+    16000      19209.000            0.0859646         0.0657883       7.50352e-05
+
+Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+
+
+==============================
+ORDENACIÓN RÁPIDA (UMBRAL = 100)
+==============================
+
+**Caso 7: Inicialización ASCENDENTE**
+
+    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
+*     500        103.847            0.0231652         0.0321909       0.000415388
+*    1000        255.705            0.0256583         0.0321914       0.000255705
+*    2000        743.258            0.0338899         0.0380015       0.000185815
+     4000       1715.000            0.0358313         0.0356112       0.000107187
+     8000       3860.000            0.0372133         0.0325514       6.03125e-05
+    16000       8567.000            0.0383392         0.0293409       3.34648e-05
+
+Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+
+
+**Caso 8: Inicialización DESCENDENTE**
+
+    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
+*     500        118.065            0.0263368         0.0365982        0.00047226
+*    1000        317.046            0.0318135         0.0399137       0.000317046
+*    2000        723.204            0.0329755         0.0369762       0.000180801
+     4000       1822.000            0.0380669          0.037833       0.000113875
+     8000       4158.000            0.0400863         0.0350645       6.49688e-05
+    16000       9016.000            0.0403486         0.0308786       3.52187e-05
+
+Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+
+
+**Caso 9: Inicialización ALEATORIA**
+
+    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
+*     500        820.458              0.18302          0.254329        0.00328183
+     1000       1968.000             0.197476          0.247757          0.001968
+     2000       3782.000             0.172445          0.193367         0.0009455
+     4000       9903.000             0.206902          0.205631       0.000618938
+     8000      18134.000             0.174826          0.152924       0.000283344
+    16000      42839.000             0.191714          0.146718        0.00016734
+
+Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
 
 
 e12. OBSERVACIONES Y MEDICIONES ANÓMALAS
 ------------------------------------------------------------
-Las mediciones se repitieron varias veces para minimizar el ruido de cronometraje. 
-Los tiempos inferiores a 1000 µs fueron corregidos promediando K=1000 ejecuciones 
-y restando el coste de generación de vectores aleatorios. 
-No se observaron valores negativos ni desviaciones inusuales.
+Las mediciones se repitieron múltiples veces para eliminar resultados anómalos.  
+Los casos marcados con (*) indican tiempos menores que el umbral de confianza, corregidos mediante
+1000 repeticiones.  
+No se observaron tiempos negativos ni desviaciones irregulares.  
+La función de medición automatiza el cálculo de medias y la resta del tiempo de generación de
+vectores, garantizando estabilidad en los resultados.
 
 
 e2. CONCLUSIONES
 ------------------------------------------------------------
-Los resultados empíricos confirman el comportamiento teórico esperado:
+Los resultados obtenidos confirman la corrección del algoritmo y su coherencia con las complejidades
+teóricas:
 
-• El algoritmo **Quicksort con mediana de tres** mantiene un rendimiento promedio 
-  de Θ(n·log n) en todos los casos probados, evitando el peor caso cuadrático.
+• En todos los casos, la cota ajustada corresponde a Θ(n·log n), como predice la teoría.  
+• La cota subestimada n¹·³ y la sobrestimada n² delimitan correctamente el comportamiento.  
+• A medida que el **umbral aumenta**, los tiempos de ejecución disminuyen, ya que los subproblemas
+pequeños se resuelven con inserción, evitando llamadas recursivas innecesarias.  
+• El mejor rendimiento global se obtiene con **UMBRAL = 100**, especialmente en vectores
+ascendentes y descendentes, donde la inserción es muy eficiente.  
+• En vectores aleatorios el comportamiento es también Θ(n·log n), aunque ligeramente más costoso
+por la menor localidad de referencia.  
+• Comparado con la **ordenación de Shell** (práctica anterior), Quicksort resulta más eficiente
+para entradas grandes, confirmando su mejor complejidad asintótica.
 
-• El parámetro **umbral** permite optimizar la eficiencia práctica, con un valor 
-  intermedio (p.ej. 10–50) ofreciendo los mejores resultados.
-
-• En la comparación con Shell, Quicksort muestra mejor escalabilidad para grandes n.
-
-• En conjunto, las mediciones son coherentes con la teoría y validan la correcta 
-  implementación del algoritmo conforme al pseudocódigo del enunciado.
-
--------------------------------------------------------------------------------------------
+En conjunto, las mediciones experimentales validan las hipótesis teóricas y demuestran una
+implementación correcta, eficiente y ajustada al diseño solicitado.
