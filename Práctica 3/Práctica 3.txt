@@ -1,51 +1,61 @@
 Práctica 3: Ordenación Rápida (Quicksort con Mediana de Tres y Umbral)
--------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
 										08/11/2025
 
-Grupo: Sebastián David Moreno Expósito, Álvaro Gómez García y Xoel Sánchez Dacoba
-Sujeto de Análisis: Algoritmos ord_rapida(), ord_rapida_aux() y mediana3()
+Grupo:
+Sebastián David Moreno Expósito, Álvaro Gómez García y Xoel Sánchez Dacoba
 
--------------------------------------------------------------------------------------------
+Sujeto de Análisis:
+Algoritmos ord_rapida(), ord_rapida_aux() y mediana3()
+
+------------------------------------------------------------------------
 
 
 e1. INTRODUCCIÓN
 ------------------------------------------------------------
-En esta práctica se ha implementado y analizado empíricamente el comportamiento del algoritmo de
-**ordenación rápida (Quicksort)** con **selección del pivote mediante mediana de tres** y un **umbral** para la
+En esta práctica se ha implementado y analizado empíricamente el comportamiento
+del algoritmo de **ordenación rápida (Quicksort)** con **selección del pivote
+mediante mediana de tres** y un **umbral** para la
 ordenación por inserción de los subvector pequeños.
 
-El objetivo es comprobar el efecto de la elección del umbral sobre el rendimiento temporal del
-algoritmo y comparar las mediciones obtenidas en distintas situaciones iniciales del vector:
-ascendente, descendente y aleatoria. También se comparan los resultados empíricos con las
-complejidades teóricas esperadas y con los obtenidos en la práctica anterior (ordenación de Shell).
+El objetivo es comprobar el efecto de la elección del umbral sobre el
+rendimiento temporal del algoritmo y comparar las mediciones obtenidas en
+distintas situaciones iniciales del vector:
+ascendente, descendente y aleatoria.
+También se comparan los resultados empíricos con las
+complejidades teóricas esperadas y con los obtenidos en
+la práctica anterior (ordenación de Shell).
 
-El experimento se ha realizado con tres valores de umbral:  
-• UMBRAL = 1  → Quicksort puro  
-• UMBRAL = 10 → Quicksort + Inserción para subvectores pequeños  
-• UMBRAL = 100 → Quicksort con inserción más agresiva  
+El experimento se ha realizado con tres valores de umbral:
+• UMBRAL = 1  → Quicksort puro
+• UMBRAL = 10 → Quicksort + Inserción para subvectores pequeños
+• UMBRAL = 100 → Quicksort con inserción más agresiva
 
 
 e3. CARACTERÍSTICAS DE LA MÁQUINA
 ------------------------------------------------------------
-• Sistema operativo: Windows 11 Home 64 bits  
-• Procesador: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz (2.80 GHz)  
-• Memoria RAM: 16 GB  
-• Versión de Python: 3.13.9  
-• Módulos utilizados: time, random, typing, math  
+• Sistema operativo: Windows 11 Home 64 bits
+• Procesador: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz (2.80 GHz)
+• Memoria RAM: 16 GB
+• Versión de Python: 3.13.9
+• Módulos utilizados: time, random, typing, math
 
 
 e4. UNIDADES DE TIEMPO
 ------------------------------------------------------------
-Los tiempos se expresan en **microsegundos (µs)**, obtenidos con la función `time.perf_counter_ns()` y
-dividiendo por 1000.  
-Cuando el tiempo medido es menor que el umbral de confianza (1000 µs), se repiten **K = 1000**
-ejecuciones y se resta el tiempo de generación de los vectores para mayor precisión.  
-Dichos valores se indican con un asterisco (*) en las tablas.
+Los tiempos se expresan en **microsegundos (µs)**, obtenidos con
+la función `time.perf_counter_ns()` y
+dividiendo por 1000.
+Cuando el tiempo medido es menor que el umbral de confianza (1000 µs),
+se repiten **K = 1000** ejecuciones y se resta el tiempo de generación de
+los vectores para mayor precisión. Dichos valores
+se indican con un asterisco (*) en las tablas.
 
 
 e5–e6. TAMAÑOS DE ENTRADA Y NÚMERO DE MUESTRAS
 ------------------------------------------------------------
-Se ha seguido una **progresión geométrica de razón 2**, partiendo de un tamaño inicial de 500 y
+Se ha seguido una **progresión geométrica de razón 2**,
+partiendo de un tamaño inicial de 500 y
 realizando seis mediciones sucesivas:
 
 n = 500, 1000, 2000, 4000, 8000, 16000
@@ -58,9 +68,9 @@ e7. FORMATO DE LOS DATOS Y PRECISIÓN
 Todas las mediciones se muestran con tres o más cifras significativas.
 Se incluyen tres columnas de normalización:
 
-- t(n)/(n·log₂n)  → Cota teórica ajustada Θ(n·log n)  
-- t(n)/n¹·³       → Cota subestimada  
-- t(n)/n²         → Cota sobreestimada  
+- t(n)/n       	  → Cota subestimada
+- t(n)/(n·log₂n)  → Cota teórica ajustada Θ(n·log n)
+- t(n)/n^1.3-1.6  → Cota sobreestimada
 
 
 e8–e9–e10–e11. RESULTADOS Y ESTUDIO DE COTAS
@@ -72,41 +82,43 @@ ORDENACIÓN RÁPIDA (UMBRAL = 1)
 
 **Caso 1: Inicialización ASCENDENTE**
 
-    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
-*     500        264.329            0.0589639         0.0819377        0.00105732
-*    1000        656.627            0.0658881         0.0826644       0.000656627
-     2000       1512.000            0.0689417         0.0773059          0.000378
-     4000       3093.000            0.0646218         0.0642247       0.000193312
-     8000       6782.000            0.0653836         0.0571927       0.000105969
-    16000      16744.000            0.0749331          0.057346       6.54062e-05
+    n[-]       t(n)[µs]         t(n)/n      t(n)/(n·log2n)      t(n)/n^α (α=1.35)
+*     500        271.106       0.542212            0.0604757              0.0615928
+*    1000        620.649       0.620649             0.062278              0.0553154
+     2000       1260.000           0.63            0.0574514              0.0440535
+     4000       3268.000          0.817             0.068278               0.044823
+     8000       6191.000       0.773875            0.0596859              0.0333111
+    16000      13626.000       0.851625            0.0609794              0.0287612
 
-Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
-
+Nota: Si (*) -> 't(n)<1000': tiempo promedio de K=1000 ejecuciones.
+Estimación constante ajustada (c en t ≈ c·n·log2n): c ≈ 0.0629811
 
 **Caso 2: Inicialización DESCENDENTE**
 
-    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
-*     500        284.280            0.0634144         0.0881222        0.00113712
-*    1000        586.366            0.0588379         0.0738191       0.000586366
-     2000       1507.000            0.0687137         0.0770503        0.00037675
-     4000       3560.000            0.0743787         0.0739217         0.0002225
-     8000       6975.000            0.0672443         0.0588203       0.000108984
-    16000      14837.000            0.0663989         0.0508148        5.7957e-05
+    n[-]       t(n)[µs]         t(n)/n      t(n)/(n·log2n)      t(n)/n^α (α=1.35)
+*     500        292.508       0.585016            0.0652498              0.0664551
+*    1000        622.832       0.622832             0.062497                0.05551
+     2000       1783.000         0.8915            0.0812983              0.0623391
+     4000       3258.000         0.8145            0.0680691              0.0446859
+     8000       8784.000          1.098            0.0846844               0.047263
+    16000      14164.000        0.88525            0.0633871              0.0298967
 
-Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+Nota: Si (*) -> 't(n)<1000': tiempo promedio de K=1000 ejecuciones.
+Estimación constante ajustada (c en t ≈ c·n·log2n): c ≈ 0.0720469
 
 
 **Caso 3: Inicialización ALEATORIA**
 
-    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
-*     500        388.443            0.0866501          0.120411        0.00155377
-*    1000        899.364            0.0902452          0.113223       0.000899364
-     2000       1475.000            0.0672547         0.0754142        0.00036875
-     4000       3162.000            0.0660634         0.0656574       0.000197625
-     8000       7309.000            0.0704643         0.0616369       0.000114203
-    16000      15365.000            0.0687618         0.0526231       6.00195e-05
+    n[-]       t(n)[µs]         t(n)/n      t(n)/(n·log2n)       t(n)/n^α (α=1.6)
+*     500        385.005        0.77001            0.0858832              0.0184976
+     1000       1229.000          1.229             0.123322              0.0194783
+     2000       2900.000           1.45             0.132229              0.0151618
+     4000       5554.000         1.3885             0.116039             0.00957877
+     8000      12271.000        1.53388             0.118302             0.00698129
+    16000      25268.000        1.57925              0.11308             0.00474219
 
-Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+Nota: Si (*) -> 't(n)<1000': tiempo promedio de K=1000 ejecuciones.
+Estimación constante ajustada (c en t ≈ c·n·log2n): c ≈ 0.115807
 
 
 ==============================
@@ -115,41 +127,44 @@ ORDENACIÓN RÁPIDA (UMBRAL = 10)
 
 **Caso 4: Inicialización ASCENDENTE**
 
-    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
-*     500        205.141            0.0457609         0.0635904       0.000820564
-*    1000        457.248            0.0458818         0.0575641       0.000457248
-     2000       1180.000            0.0538037         0.0603313          0.000295
-     4000       2726.000            0.0569541         0.0566041       0.000170375
-     8000       5940.000            0.0572661         0.0500921       9.28125e-05
-    16000      12419.000            0.0555778         0.0425335       4.85117e-05
+    n[-]       t(n)[µs]         t(n)/n      t(n)/(n·log2n)      t(n)/n^α (α=1.35)
+*     500        237.340        0.47468            0.0529435              0.0539214
+*    1000        474.685       0.474685            0.0476315              0.0423063
+     2000       1121.000         0.5605            0.0511135              0.0391936
+     4000       2520.000           0.63            0.0526501              0.0345636
+     8000       5002.000        0.62525            0.0482231              0.0269136
+    16000      11226.000       0.701625            0.0502389              0.0236953
 
-Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+Nota: Si (*) -> 't(n)<1000': tiempo promedio de K=1000 ejecuciones.
+Estimación constante ajustada (c en t ≈ c·n·log2n): c ≈ 0.0503707
 
 
 **Caso 5: Inicialización DESCENDENTE**
 
-    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
-*     500        211.376            0.0471517         0.0655231       0.000845504
-*    1000        466.602            0.0468204         0.0587417       0.000466602
-     2000       1202.000            0.0548068         0.0614562         0.0003005
-     4000       2565.000            0.0535903          0.053261       0.000160313
-     8000       5799.000            0.0559068         0.0489031       9.06094e-05
-    16000      12818.000            0.0573634            0.0439       5.00703e-05
+    n[-]       t(n)[µs]         t(n)/n      t(n)/(n·log2n)      t(n)/n^α (α=1.35)
+*     500        201.289       0.402578            0.0449016               0.045731
+*    1000        479.341       0.479341            0.0480987              0.0427213
+     2000       1026.000          0.513            0.0467819              0.0358721
+     4000       2442.000         0.6105            0.0510205              0.0334938
+     8000       5176.000          0.647            0.0499006              0.0278498
+    16000      10545.000       0.659062            0.0471912              0.0222579
 
-Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+Nota: Si (*) -> 't(n)<1000': tiempo promedio de K=1000 ejecuciones.
+Estimación constante ajustada (c en t ≈ c·n·log2n): c ≈ 0.0493708
 
 
 **Caso 6: Inicialización ALEATORIA**
 
-    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
-*     500        242.163            0.0540194         0.0750666       0.000968652
-*    1000        860.177             0.086313           0.10829       0.000860177
-     2000       1942.000            0.0885482         0.0992911         0.0004855
-     4000       4084.000            0.0853266         0.0848023        0.00025525
-     8000       8776.000            0.0846073         0.0740082       0.000137125
-    16000      19209.000            0.0859646         0.0657883       7.50352e-05
+    n[-]       t(n)[µs]         t(n)/n      t(n)/(n·log2n)       t(n)/n^α (α=1.6)
+*     500        341.819       0.683638            0.0762497              0.0164227
+     1000       1416.000          1.416             0.142086              0.0224421
+     2000       2735.000         1.3675             0.124706              0.0142991
+     4000       6339.000        1.58475              0.13244              0.0109326
+     8000      14225.000        1.77812              0.13714             0.00809298
+    16000      26137.000        1.63356             0.116969             0.00490528
 
-Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+Nota: Si (*) -> 't(n)<1000': tiempo promedio de K=1000 ejecuciones.
+Estimación constante ajustada (c en t ≈ c·n·log2n): c ≈ 0.12885
 
 
 ==============================
@@ -158,68 +173,79 @@ ORDENACIÓN RÁPIDA (UMBRAL = 100)
 
 **Caso 7: Inicialización ASCENDENTE**
 
-    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
-*     500        103.847            0.0231652         0.0321909       0.000415388
-*    1000        255.705            0.0256583         0.0321914       0.000255705
-*    2000        743.258            0.0338899         0.0380015       0.000185815
-     4000       1715.000            0.0358313         0.0356112       0.000107187
-     8000       3860.000            0.0372133         0.0325514       6.03125e-05
-    16000       8567.000            0.0383392         0.0293409       3.34648e-05
+    n[-]       t(n)[µs]         t(n)/n      t(n)/(n·log2n)      t(n)/n^α (α=1.35)
+*     500        116.115        0.23223            0.0259018              0.0263802
+*    1000        280.447       0.280447             0.028141              0.0249949
+*    2000        650.870       0.325435            0.0296773              0.0227564
+     4000       1448.000          0.362            0.0302529              0.0198604
+     8000       3826.000        0.47825            0.0368855              0.0205861
+    16000       7390.000       0.461875            0.0330719              0.0155985
 
-Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+Nota: Si (*) -> 't(n)<1000': tiempo promedio de K=1000 ejecuciones.
+Estimación constante ajustada (c en t ≈ c·n·log2n): c ≈ 0.0334035
 
 
 **Caso 8: Inicialización DESCENDENTE**
 
-    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
-*     500        118.065            0.0263368         0.0365982        0.00047226
-*    1000        317.046            0.0318135         0.0399137       0.000317046
-*    2000        723.204            0.0329755         0.0369762       0.000180801
-     4000       1822.000            0.0380669          0.037833       0.000113875
-     8000       4158.000            0.0400863         0.0350645       6.49688e-05
-    16000       9016.000            0.0403486         0.0308786       3.52187e-05
+    n[-]       t(n)[µs]         t(n)/n      t(n)/(n·log2n)      t(n)/n^α (α=1.35)
+*     500        122.211       0.244422            0.0272616              0.0277652
+*    1000        285.342       0.285342            0.0286322              0.0254311
+*    2000        699.230       0.349615            0.0318824              0.0244472
+     4000       1528.000          0.382            0.0319244              0.0209576
+     8000       3602.000        0.45025             0.034726              0.0193808
+    16000       7671.000       0.479438            0.0343294              0.0161916
 
-Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
-
+Nota: Si (*) -> 't(n)<1000': tiempo promedio de K=1000 ejecuciones.
+Estimación constante ajustada (c en t ≈ c·n·log2n): c ≈ 0.0336599
 
 **Caso 9: Inicialización ALEATORIA**
 
-    n[-]       t(n)[µs]       t(n)/(n·log2n)        t(n)/n^1.3           t(n)/n^2
-*     500        820.458              0.18302          0.254329        0.00328183
-     1000       1968.000             0.197476          0.247757          0.001968
-     2000       3782.000             0.172445          0.193367         0.0009455
-     4000       9903.000             0.206902          0.205631       0.000618938
-     8000      18134.000             0.174826          0.152924       0.000283344
-    16000      42839.000             0.191714          0.146718        0.00016734
+    n[-]       t(n)[µs]         t(n)/n      t(n)/(n·log2n)       t(n)/n^α (α=1.6)
+      500       1170.000           2.34             0.260992              0.0562126
+     1000       2032.000          2.032             0.203898               0.032205
+     2000       4452.000          2.226             0.202995              0.0232759
+     4000      11265.000        2.81625             0.235359              0.0194283
+     8000      19396.000         2.4245             0.186992              0.0110349
+    16000      39342.000        2.45887             0.176064             0.00738354
 
-Cota subestimada: n¹·³    Cota ajustada: n·log n    Cota sobreestimada: n²
+Nota: Si (*) -> 't(n)<1000': tiempo promedio de K=1000 ejecuciones.
+Estimación constante ajustada (c en t ≈ c·n·log2n): c ≈ 0.199472
 
 
 e12. OBSERVACIONES Y MEDICIONES ANÓMALAS
 ------------------------------------------------------------
-Las mediciones se repitieron múltiples veces para eliminar resultados anómalos.  
-Los casos marcados con (*) indican tiempos menores que el umbral de confianza, corregidos mediante
-1000 repeticiones.  
-No se observaron tiempos negativos ni desviaciones irregulares.  
-La función de medición automatiza el cálculo de medias y la resta del tiempo de generación de
+Las mediciones se repitieron múltiples veces para eliminar resultados anómalos.
+Los casos marcados con (*) indican tiempos menores que el umbral de confianza,
+corregidos mediante
+1000 repeticiones.
+No se observaron tiempos negativos ni desviaciones irregulares.
+La función de medición automatiza el cálculo de medias y
+la resta del tiempo de generación de
 vectores, garantizando estabilidad en los resultados.
 
 
 e2. CONCLUSIONES
 ------------------------------------------------------------
-Los resultados obtenidos confirman la corrección del algoritmo y su coherencia con las complejidades
+Los resultados obtenidos confirman la corrección del algoritmo y su coherencia
+con las complejidades
 teóricas:
 
-• En todos los casos, la cota ajustada corresponde a Θ(n·log n), como predice la teoría.  
-• La cota subestimada n¹·³ y la sobrestimada n² delimitan correctamente el comportamiento.  
-• A medida que el **umbral aumenta**, los tiempos de ejecución disminuyen, ya que los subproblemas
-pequeños se resuelven con inserción, evitando llamadas recursivas innecesarias.  
-• El mejor rendimiento global se obtiene con **UMBRAL = 100**, especialmente en vectores
-ascendentes y descendentes, donde la inserción es muy eficiente.  
-• En vectores aleatorios el comportamiento es también Θ(n·log n), aunque ligeramente más costoso
-por la menor localidad de referencia.  
-• Comparado con la **ordenación de Shell** (práctica anterior), Quicksort resulta más eficiente
+• En todos los casos, la cota ajustada corresponde a Θ(n·log n),
+como predice la teoría.
+• La cota subestimada n y la sobrestimada n, n^1.35-n^1.6 delimitan correctamente
+el comportamiento.
+• A medida que el **umbral aumenta**, los tiempos de ejecución disminuyen,
+ya que los subproblemas
+pequeños se resuelven con inserción, evitando llamadas recursivas innecesarias.
+• El mejor rendimiento global se obtiene con **UMBRAL = 100**, especialmente
+en vectores
+ascendentes y descendentes, donde la inserción es muy eficiente.
+• En vectores aleatorios el comportamiento es también Θ(n·log n),
+aunque ligeramente más costoso por la menor localidad de referencia.
+• Comparado con la **ordenación de Shell** (práctica anterior),
+Quicksort resulta más eficiente
 para entradas grandes, confirmando su mejor complejidad asintótica.
 
-En conjunto, las mediciones experimentales validan las hipótesis teóricas y demuestran una
+En conjunto, las mediciones experimentales validan las
+hipótesis teóricas y demuestran una
 implementación correcta, eficiente y ajustada al diseño solicitado.
