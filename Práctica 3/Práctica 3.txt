@@ -28,9 +28,9 @@ El experimento se ha realizado con tres valores de umbral:
 e3. CARACTERÍSTICAS DE LA MÁQUINA
 ------------------------------------------------------------
 • Sistema operativo: Windows 11 Home 64 bits  
-• Procesador: Intel Core i5-1035G1 @ 1.00GHz  
-• Memoria RAM: 8 GB  
-• Versión de Python: 3.12.10  
+• Procesador: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz (2.80 GHz)  
+• Memoria RAM: 16 GB  
+• Versión de Python: 3.13.9  
 • Módulos utilizados: time, random, typing, math  
 
 
