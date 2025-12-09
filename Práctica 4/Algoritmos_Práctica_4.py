@@ -196,7 +196,8 @@ def validar_tabla_cerrada(tabla: TablaCerrada):
     if encontrado is None:
         print(f"No encuentro: {Carlos}, colisiones: {colisiones}")
     else:
-        print(f"Error: Carlos se ha vuelto a colar en la tabla, nadie está a salvo")
+        print(f"Error: Carlos se ha vuelto a colar en la tabla, nadie está a salvo")#Carlos da miedo
+    return tabla
 
 
 def validar_tablas():
