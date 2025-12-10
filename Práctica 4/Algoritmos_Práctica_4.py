@@ -217,6 +217,40 @@ def validar_tablas():
     tabla_cerrada_doble=TablaCerrada(10, dispersionTestTeoria, exploracion_dobleTeoria)
     validar_tabla_cerrada(tabla_cerrada_doble)
     return True
-
+#Conteo de Colisiones punto 3
+def insertar_datos_y_contar_colisiones(tabla: TablaAbierta| TablaCerrada, datos: list[tuple[str, str]]) -> int:#Pequeña función para no repetir código 
+    total_colisiones = 0                                                                            #al insertar los datos y contar las colisiones de todas las tablas
+    for clave, sinonimos in datos:
+        colisiones = tabla.insertar(clave, sinonimos)
+        total_colisiones += colisiones
+    return total_colisiones
 if __name__ == "__main__":
-    validar_tablas()
+    #validar_tablas()
+    datos=leer_sinonimos()
+    ##Calculo de Colisiones Tabla Abierta
+    #A
+    tabla_abierta_A=TablaAbierta(20011, dispersionA)
+    total_colisiones_abierta_A=insertar_datos_y_contar_colisiones(tabla_abierta_A, datos)
+    print(f"Total colisiones Tabla Abierta Dispersion A: {total_colisiones_abierta_A}")
+    print()
+    #B
+    tabla_abierta_B=TablaAbierta(20011, dispersionB)
+    total_colisiones_abierta_B=insertar_datos_y_contar_colisiones(tabla_abierta_B, datos)
+    print(f"Total colisiones Tabla Abierta Dispersion A: {total_colisiones_abierta_B}")
+    print()
+    ##Calculo de Colisiones Tabla Cerrada
+    #A Lineal
+    tabla_cerrada_lineal=TablaCerrada(20011, dispersionA, exploracion_lineal)
+    total_colisiones_cerrada_lineal=insertar_datos_y_contar_colisiones(tabla_cerrada_lineal, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion A Lineal: {total_colisiones_cerrada_lineal}")
+    print()
+    #A Cuadratica
+    tabla_cerrada_cuadratica=TablaCerrada(20011, dispersionA, exploracion_cuadratica)
+    total_colisiones_cerrada_cuadratica=insertar_datos_y_contar_colisiones(tabla_cerrada_cuadratica, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion A Cuadratica: {total_colisiones_cerrada_cuadratica}")
+    print()
+    #A Doble
+    tabla_cerrada_doble=TablaCerrada(20011, dispersionA, exploracion_doble)
+    total_colisiones_cerrada_doble=insertar_datos_y_contar_colisiones(tabla_cerrada_doble, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion A Doble: {total_colisiones_cerrada_doble}")
+    print()
