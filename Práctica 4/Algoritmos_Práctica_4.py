@@ -1,6 +1,8 @@
-from collections.abc import Callable
+from collections.abc import Callable 
+import random
+import time
 
-#Importación de datos
+##Importación de datos
 def leer_sinonimos(nombre="sinonimos.txt"):
     datos = []
     with open(nombre, "r", encoding="utf-8") as f:
@@ -161,6 +163,9 @@ def exploracion_dobleTeoria(pos_ini: int, intento: int) -> int:
     return pos_ini + intento * paso
 
 def validar_tabla_abierta(tabla: TablaAbierta):
+    """
+    Función para validar una tabla abierta con los datos de prueba del enunciado.
+    """
     datos = ["ANA", "LUIS", "JOSE", "ROSA", "OLGA", "IVAN"]    
     Carlos="CARLOS"#Xd
     total_colisiones = 0
@@ -181,6 +186,9 @@ def validar_tabla_abierta(tabla: TablaAbierta):
     return tabla
 
 def validar_tabla_cerrada(tabla: TablaCerrada):
+    """
+    Función para validar una tabla cerrada con los datos de prueba del enunciado.
+    """
     datos = ["ANA", "LUIS", "JOSE", "ROSA", "OLGA", "IVAN"]   
     Carlos="CARLOS"
     total_colisiones = 0
@@ -201,6 +209,9 @@ def validar_tabla_cerrada(tabla: TablaCerrada):
 
 
 def validar_tablas():
+    """
+    Función para validar las tablas con los datos de prueba del enunciado.
+    """        
     print("** TEST TABLA ABIERTA")
     tabla_abierta=TablaAbierta(10, dispersionTestTeoria)
     validar_tabla_abierta(tabla_abierta)
@@ -217,8 +228,13 @@ def validar_tablas():
     tabla_cerrada_doble=TablaCerrada(10, dispersionTestTeoria, exploracion_dobleTeoria)
     validar_tabla_cerrada(tabla_cerrada_doble)
     return True
+
 ##Conteo de Colisiones punto 3
 def insertar_datos_y_contar_colisiones(tabla: TablaAbierta| TablaCerrada, datos: list[tuple[str, str]]) -> int:#Pequeña función para no repetir código 
+    """
+    Inserta los datos en la tabla y cuenta las colisiones totales.
+    Devuelve el número total de colisiones.
+    """   
     total_colisiones = 0                                                                            #al insertar los datos y contar las colisiones de todas las tablas
     for clave, sinonimos in datos:
         colisiones = tabla.insertar(clave, sinonimos)
@@ -235,23 +251,24 @@ def conteos_tabla_abierta(datos: list[tuple[str, str]]):
     total_colisiones_abierta_B=insertar_datos_y_contar_colisiones(tabla_abierta_B, datos)
     print(f"Total colisiones Tabla Abierta Dispersion B: {total_colisiones_abierta_B}")
     print()
-    return
+    return tabla_abierta_A, tabla_abierta_B
 
 def conteos_tabla_cerrada_disp_A(datos: list[tuple[str, str]]):
     #A Lineal
-    tabla_cerrada_lineal=TablaCerrada(20011, dispersionA, exploracion_lineal)
-    total_colisiones_cerrada_lineal=insertar_datos_y_contar_colisiones(tabla_cerrada_lineal, datos)
-    print(f"Total colisiones Tabla Cerrada Dispersion A Lineal: {total_colisiones_cerrada_lineal}")
+    tabla_cerrada_lineal_A=TablaCerrada(20011, dispersionA, exploracion_lineal)
+    total_colisiones_cerrada_lineal_A=insertar_datos_y_contar_colisiones(tabla_cerrada_lineal_A, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion A Lineal: {total_colisiones_cerrada_lineal_A}")
     #A Cuadratica
-    tabla_cerrada_cuadratica=TablaCerrada(20011, dispersionA, exploracion_cuadratica)
-    total_colisiones_cerrada_cuadratica=insertar_datos_y_contar_colisiones(tabla_cerrada_cuadratica, datos)
-    print(f"Total colisiones Tabla Cerrada Dispersion A Cuadratica: {total_colisiones_cerrada_cuadratica}")
+    tabla_cerrada_cuadratica_A=TablaCerrada(20011, dispersionA, exploracion_cuadratica)
+    total_colisiones_cerrada_cuadratica_A=insertar_datos_y_contar_colisiones(tabla_cerrada_cuadratica_A, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion A Cuadratica: {total_colisiones_cerrada_cuadratica_A}")
     #A Doble
-    tabla_cerrada_doble=TablaCerrada(20011, dispersionA, exploracion_doble)
-    total_colisiones_cerrada_doble=insertar_datos_y_contar_colisiones(tabla_cerrada_doble, datos)
-    print(f"Total colisiones Tabla Cerrada Dispersion A Doble: {total_colisiones_cerrada_doble}")
+    tabla_cerrada_doble_A=TablaCerrada(20011, dispersionA, exploracion_doble)
+    total_colisiones_cerrada_doble_A=insertar_datos_y_contar_colisiones(tabla_cerrada_doble_A, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion A Doble: {total_colisiones_cerrada_doble_A}")
     print()
-    return
+    return tabla_cerrada_lineal_A, tabla_cerrada_cuadratica_A, tabla_cerrada_doble_A
+
 def conteos_tabla_cerrada_disp_B(datos: list[tuple[str, str]]):
     #B Lineal
     tabla_cerrada_lineal_B=TablaCerrada(20011, dispersionB, exploracion_lineal)
@@ -266,7 +283,173 @@ def conteos_tabla_cerrada_disp_B(datos: list[tuple[str, str]]):
     total_colisiones_cerrada_doble_B=insertar_datos_y_contar_colisiones(tabla_cerrada_doble_B, datos)
     print(f"Total colisiones Tabla Cerrada Dispersion B Doble: {total_colisiones_cerrada_doble_B}")
     print()
+    return tabla_cerrada_lineal_B, tabla_cerrada_cuadratica_B, tabla_cerrada_doble_B
+##Calculos de eficiencia punto 4
+
+def microsegundos() -> int: #Esta función la hemos usado creo que en todas las prácticas
+    return time.perf_counter_ns() // 1000
+
+def generar_claves_aleatorias(datos_completos: list[tuple[str, str]], n: int) -> list[str]: 
+    """
+    Selecciona n claves aleatorias del conjunto completo de 19062 claves para ser buscadas.
+    """
+    return random.sample([d[0] for d in datos_completos], k=n)
+
+def wrapper_busqueda(tabla, claves_a_buscar: list[str]) -> int: #Aprendí hoy mismo lo que es un wrapper, no como concepto sino como uso de la palabra
+    """
+    Función que realiza n búsquedas en la tabla.
+    Devuelve la suma total de colisiones para esa muestra n.
+    """
+    total_colisiones = 0
+    for clave in claves_a_buscar:
+        _, colisiones = tabla.buscar(clave)
+        total_colisiones += colisiones
+    return total_colisiones 
+
+def _medir_tiempo_busqueda_aux(tabla, claves_a_buscar: list[str], K: int = 1000) -> tuple[float, str, int]:
+    """
+    Mide el tiempo de buscar n claves en la tabla, con corrección K.
+    Retorna (tiempo_µs, marca, colisiones_promedio)
+    """
+    
+    ta = microsegundos()
+    colisiones_prueba = wrapper_busqueda(tabla, claves_a_buscar) 
+    td = microsegundos()
+    t = td - ta
+    
+    if t >= 1000:
+        return float(t), " ", colisiones_prueba
+    
+    ta = microsegundos()
+    for _ in range(K):    # Corrección por repeticiones K
+        wrapper_busqueda(tabla, claves_a_buscar) 
+    td = microsegundos()
+    t1 = td - ta
+    
+    # No restamos el costo del generador (t2) ya que las claves se generaron fuera por cierto. Me estuvo dando problemas
+    # al restarlo y obtener movidas raras.
+    
+    colisiones_final = wrapper_busqueda(tabla, claves_a_buscar)
+
+    return (t1 / K), "*", colisiones_final # t1/K es el tiempo promedio
+
+def medir_tiempo_busqueda(tabla_llena, 
+                           datos_completos: list[tuple[str, str]],
+                           muestra_inicial: int,
+                           muestras: int, factor: int = 2) -> dict[int, tuple[float, str, int]]:
+    
+    """
+    Mide el tiempo total de buscar n elementos (y cuenta las colisiones)
+    para n = n_inicial, n*factor, n*(factor^2), etc.
+    
+    Retorna: {n: (tiempo_µs, marca, colisiones_totales)}
+    """
+    
+    res: dict[int, tuple[float, str, int]] = {}
+    n = muestra_inicial
+    
+    for _ in range(muestras): #Generamos n claves aleatorias para esta muestra siguiendo el enunciado del punto 4
+                                # Esto asegura que las búsquedas siempre son aleatorias y no en orden de inserción
+
+        claves_a_buscar = generar_claves_aleatorias(datos_completos, n) 
+
+        t, m, colisiones = _medir_tiempo_busqueda_aux(tabla_llena, claves_a_buscar) #La función auxliar basicamente añade la corrección K para tiempos pequeños
+        
+        if t < 0:
+            raise RuntimeError("Cronómetro interno no fiable.") #Lol, nunca debería pasar esto
+            
+        res[n] = (t, m, colisiones) 
+        
+        n *= factor  #Esto es multiplicar n por el factor (normalmente será 2) para la siguiente muestra
+
+        
+    return res
+    
+def _denominadores_busqueda(n: int) -> tuple[float, float, float]: #No sé, me dio paja repetir esto en la función de mostrar tiempos una y otra vez
+    """
+    Calcula n^0.8, n, n^1.2 para normalización.
+    """
+    n_0_8 = n ** 0.8
+    n_1_0 = float(max(1, n)) # Evitar división por cero, no vaya a ser
+    n_1_2 = n ** 1.2
+    return n_0_8, n_1_0, n_1_2
+
+def mostrar_tiempo_busqueda(alg_name: str, 
+                            v: dict[int, tuple[float, str, int]]) -> None:
+    """
+    Imprime tabla con t(n), y normaliza con n^0.8, n, n^1.2, e incluye Colisiones.
+    """
+    print()
+    print(f"*** {alg_name} ***")
+    
+    header = (f"{'n':>8} {'t(n)[µs]':>14} {'t(n)/n^0.8':>14}"
+              f"{'t(n)/n':>14} {'t(n)/n^1.2':>14} {'Colisiones':>14}")
+    print(header)
+
+    for n, (t_n, signo, colisiones) in v.items():
+        n_0_8, n_1_0, n_1_2 = _denominadores_busqueda(n)
+        
+        v_0_8 = t_n / n_0_8
+        v_1_0 = t_n / n_1_0
+        v_1_2 = t_n / n_1_2
+        
+        print(f"{signo}{n:8d} {t_n:14.3f} {v_0_8:14.6g} {v_1_0:14.6g} {v_1_2:14.6g} {colisiones:14d}")
+
     return
+    
+def main_complejidad(datos_sinonimos):
+    """
+    Ejecuta el Punto 4: Mide la complejidad de la búsqueda para las 8 tablas.
+    """
+    
+    TAM_CERRADA = 38197 #Configuración del tamaño para ambos tipos de tablas
+    TAM_ABIERTA = 19069 
+    
+    configuraciones = [                             
+        (TablaAbierta, TAM_ABIERTA, dispersionA, None, "Tabla Abierta, Disp. A"),
+        (TablaAbierta, TAM_ABIERTA, dispersionB, None, "Tabla Abierta, Disp. B"),
+        
+        (TablaCerrada, TAM_CERRADA, dispersionA, exploracion_lineal, "Tabla Cerrada, Disp. A, Lineal"),
+        (TablaCerrada, TAM_CERRADA, dispersionB, exploracion_lineal, "Tabla Cerrada, Disp. B, Lineal"),
+        
+        (TablaCerrada, TAM_CERRADA, dispersionA, exploracion_cuadratica, "Tabla Cerrada, Disp. A, Cuadrática"),
+        (TablaCerrada, TAM_CERRADA, dispersionB, exploracion_cuadratica, "Tabla Cerrada, Disp. B, Cuadrática"),
+        
+        (TablaCerrada, TAM_CERRADA, dispersionA, exploracion_doble, "Tabla Cerrada, Disp. A, Doble"),
+        (TablaCerrada, TAM_CERRADA, dispersionB, exploracion_doble, "Tabla Cerrada, Disp. B, Doble"),
+    ]
+    
+    resultados_compilados = {} # Guardará los resultados de medir_tiempo_busqueda
+        
+    for ClaseTabla, tam, disp_func, resol_func, nombre_test in configuraciones:
+        
+        print(f"\nConstruyendo tabla: {nombre_test}...")
+        
+        if resol_func is None:
+            tabla_llena = ClaseTabla(tam, disp_func)
+        else:
+            tabla_llena = ClaseTabla(tam, disp_func, resol_func)
+            
+        _ = insertar_datos_y_contar_colisiones(tabla_llena, datos_sinonimos)
+        
+        print(f"Midiendo tiempo de búsqueda para {nombre_test}...")#Tan solo una pequeña pijada estética
+        
+
+        tiempos_medidos = medir_tiempo_busqueda(
+            tabla_llena, 
+            datos_sinonimos,
+            muestra_inicial=125,
+            muestras=8,
+            factor=2
+        )
+        
+        mostrar_tiempo_busqueda(nombre_test, tiempos_medidos)
+        
+        #resultados_compilados[nombre_test] = tiempos_medidos #Si quisiera guardar los resultados para usarlos luego, pero no hace falta. Lo hice sin pensarlo
+
+    print("\nAnálisis de Complejidad Finalizado.")
+    return
+
 if __name__ == "__main__":
     #validar_tablas()
     datos=leer_sinonimos()
@@ -275,4 +458,7 @@ if __name__ == "__main__":
     ##Calculo de Colisiones Tabla Cerrada
     conteos_tabla_cerrada_disp_A(datos)
     conteos_tabla_cerrada_disp_B(datos)
-    pass 
+    ##Medición de tiempos de búsqueda
+    print("Medición de tiempos de búsqueda:")
+    main_complejidad(datos)
+    pass #Creo que es la práctica entre entender conceptos y programar que más tiempo me ha llevado.     
