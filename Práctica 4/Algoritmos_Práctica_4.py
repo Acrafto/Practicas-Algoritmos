@@ -204,7 +204,7 @@ def validar_tabla_cerrada(tabla: TablaCerrada):
     if encontrado is None:
         print(f"No encuentro: {Carlos}, colisiones: {colisiones}")
     else:
-        print(f"Error: Carlos se ha vuelto a colar en la tabla, nadie está a salvo")#Carlos da miedo
+        print(f"Error: Carlos se ha vuelto a colar en la tabla, nadie está a salvo")#Dios se ampare de nosotros
     return tabla
 
 
@@ -231,11 +231,12 @@ def validar_tablas():
 
 ##Conteo de Colisiones punto 3
 def insertar_datos_y_contar_colisiones(tabla: TablaAbierta| TablaCerrada, datos: list[tuple[str, str]]) -> int:#Pequeña función para no repetir código 
-    """
+                                                                                                            #al insertar los datos y contar las colisiones de todas las tablas
+    """                                                                                                        
     Inserta los datos en la tabla y cuenta las colisiones totales.
     Devuelve el número total de colisiones.
     """   
-    total_colisiones = 0                                                                            #al insertar los datos y contar las colisiones de todas las tablas
+    total_colisiones = 0                                                                            
     for clave, sinonimos in datos:
         colisiones = tabla.insertar(clave, sinonimos)
         total_colisiones += colisiones
@@ -295,7 +296,7 @@ def generar_claves_aleatorias(datos_completos: list[tuple[str, str]], n: int) ->
     """
     return random.sample([d[0] for d in datos_completos], k=n)
 
-def wrapper_busqueda(tabla, claves_a_buscar: list[str]) -> int: #Aprendí hoy mismo lo que es un wrapper, no como concepto sino como uso de la palabra
+def wrapper_busqueda(tabla, claves_a_buscar: list[str]) -> int: 
     """
     Función que realiza n búsquedas en la tabla.
     Devuelve la suma total de colisiones para esa muestra n.
@@ -451,7 +452,7 @@ def main_complejidad(datos_sinonimos):
     return
 
 if __name__ == "__main__":
-    #validar_tablas()
+    validar_tablas()
     datos=leer_sinonimos()
     ##Calculo de Colisiones Tabla Abierta
     conteos_tabla_abierta(datos)
@@ -459,6 +460,10 @@ if __name__ == "__main__":
     conteos_tabla_cerrada_disp_A(datos)
     conteos_tabla_cerrada_disp_B(datos)
     ##Medición de tiempos de búsqueda
-    print("Medición de tiempos de búsqueda:")
-    main_complejidad(datos)
+    i=0
+    while i<3:#Es suficiente con hacer 3 veces la medición para ver que los resultados son consistentes y evitar variaciones inesperadas
+        print(f"\n--- Medición de tiempos de búsqueda, iteración {i+1} ---")
+        main_complejidad(datos)
+        i+=1
     pass #Creo que es la práctica entre entender conceptos y programar que más tiempo me ha llevado.     
+
