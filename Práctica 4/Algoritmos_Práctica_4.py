@@ -63,14 +63,19 @@ class TablaAbierta:
             return 0 
             
         else:
-            nuevo_nodo.siguiente = self.tabla[indice]
-            self.tabla[indice] = nuevo_nodo
-            return 1 #Colisión al insertar en una lista enlazada, no entiendo muy bien por qué pediría mostrar las colisiones
-                    #si siempre pide insertar al inicio y por tanto siempre hay sólo una colisión si ya hay algo en esa posición
+                nuevo_nodo.siguiente = self.tabla[indice]
+                self.tabla[indice] = nuevo_nodo
+                # Colisión al insertar en una lista enlazada. No queda muy claro
+                # por qué pedir mostrar las colisiones: al insertar siempre
+                # al inicio, habrá una única colisión si ya existe un nodo
+                # en esa posición.
+                return 1
 
     def mostrar(self):
-        for i, item in enumerate(self.tabla):#enumerate es una función incorporada en Python que permite iterar sobre una secuencia y
-                                            #da tanto el índice como el valor de cada elemento en cada iteración.
+        for i, item in enumerate(self.tabla):
+            # enumerate es una función incorporada en Python que permite
+            # iterar sobre una secuencia y da tanto el índice como el
+            # valor de cada elemento en cada iteración.
             print(f"Índice {i}: ", end="")
             actual = item
             while actual is not None:
@@ -83,7 +88,9 @@ def exploracion_lineal(pos_ini: int, intento: int) -> int:
     return pos_ini + intento
 
 def exploracion_cuadratica(pos_ini: int, intento: int) -> int:
-    return pos_ini + intento**2 #pareciera algo simple, pero es simplemente elevar al cuadrado el intento cada vez
+    # Eleva al cuadrado el intento para obtener el desplazamiento
+    # en la exploración cuadrática.
+    return pos_ini + intento**2
 def exploracion_doble(pos_ini: int, intento: int) -> int: #Con R de 10007 según el pdf
     R = 10007
     paso = R - (pos_ini % R)
@@ -196,15 +203,17 @@ def validar_tabla_cerrada(tabla: TablaCerrada):
         colisiones = tabla.insertar(dato, "sinonimo")     
         total_colisiones += colisiones
     tabla.mostrar()
-    print(f"Número total de colisiones al insertar los elementos: {total_colisiones}")
+    print(f"Número total de colisiones al insertar los elementos:"
+           f"{total_colisiones}")
     for dato in datos:
         encontrado, colisiones=tabla.buscar(dato)
-        print(f"Al buscar:\"{dato}\", encuentro: {encontrado}, colisiones: {colisiones}")
+        print(f"Al buscar:\"{dato}\", encuentro: {encontrado}, colisiones:" 
+              f"{colisiones}")
     encontrado,colisiones=tabla.buscar(Carlos)
     if encontrado is None:
         print(f"No encuentro: {Carlos}, colisiones: {colisiones}")
     else:
-        print(f"Error: Carlos se ha vuelto a colar en la tabla, nadie está a salvo")#Dios se ampare de nosotros
+        print(f"Error: Carlos se ha colado en la tabla, nadie está a salvo")#Dios se ampare de nosotros
     return tabla
 
 
@@ -217,26 +226,33 @@ def validar_tablas():
     validar_tabla_abierta(tabla_abierta)
     print()
     print("** TEST TABLA CERRADA LINEA")
-    tabla_cerrada_lineal=TablaCerrada(10, dispersionTestTeoria, exploracion_lineal)
+    tabla_cerrada_lineal=TablaCerrada(10, dispersionTestTeoria,
+     exploracion_lineal)
     validar_tabla_cerrada(tabla_cerrada_lineal)
     print()
     print("** TEST TABLA CERRADA CUADRATICA")
-    tabla_cerrada_cuadratica=TablaCerrada(10, dispersionTestTeoria, exploracion_cuadratica)
+    tabla_cerrada_cuadratica=TablaCerrada(10, dispersionTestTeoria, 
+                                          exploracion_cuadratica)
     validar_tabla_cerrada(tabla_cerrada_cuadratica)
     print()
     print("** TEST TABLA CERRADA DOBLE")
-    tabla_cerrada_doble=TablaCerrada(10, dispersionTestTeoria, exploracion_dobleTeoria)
+    tabla_cerrada_doble=TablaCerrada(10, dispersionTestTeoria, 
+                                     exploracion_dobleTeoria)
     validar_tabla_cerrada(tabla_cerrada_doble)
     return True
 
 ##Conteo de Colisiones punto 3
-def insertar_datos_y_contar_colisiones(tabla: TablaAbierta| TablaCerrada, datos: list[tuple[str, str]]) -> int:#Pequeña función para no repetir código 
-                                                                                                            #al insertar los datos y contar las colisiones de todas las tablas
-    """                                                                                                        
+def insertar_datos_y_contar_colisiones(
+    tabla: TablaAbierta | TablaCerrada,
+    datos: list[tuple[str, str]],
+) -> int:
+    # Pequeña función para no repetir código al insertar los datos
+    # y contar las colisiones de todas las tablas.
+    """
     Inserta los datos en la tabla y cuenta las colisiones totales.
     Devuelve el número total de colisiones.
-    """   
-    total_colisiones = 0                                                                            
+    """
+    total_colisiones = 0
     for clave, sinonimos in datos:
         colisiones = tabla.insertar(clave, sinonimos)
         total_colisiones += colisiones
@@ -245,44 +261,62 @@ def insertar_datos_y_contar_colisiones(tabla: TablaAbierta| TablaCerrada, datos:
 def conteos_tabla_abierta(datos: list[tuple[str, str]]):
     #A
     tabla_abierta_A=TablaAbierta(20011, dispersionA)
-    total_colisiones_abierta_A=insertar_datos_y_contar_colisiones(tabla_abierta_A, datos)
-    print(f"Total colisiones Tabla Abierta Dispersion A: {total_colisiones_abierta_A}")
+    total_colisiones_abierta_A=insertar_datos_y_contar_colisiones
+    (tabla_abierta_A, datos)
+    print(f"Total colisiones Tabla Abierta Dispersion A:"
+           f"{total_colisiones_abierta_A}")
     #B
     tabla_abierta_B=TablaAbierta(20011, dispersionB)
-    total_colisiones_abierta_B=insertar_datos_y_contar_colisiones(tabla_abierta_B, datos)
-    print(f"Total colisiones Tabla Abierta Dispersion B: {total_colisiones_abierta_B}")
+    total_colisiones_abierta_B=insertar_datos_y_contar_colisiones
+    (tabla_abierta_B, datos)
+    print(f"Total colisiones Tabla Abierta Dispersion B: "
+          f"{total_colisiones_abierta_B}")
     print()
     return tabla_abierta_A, tabla_abierta_B
 
 def conteos_tabla_cerrada_disp_A(datos: list[tuple[str, str]]):
     #A Lineal
     tabla_cerrada_lineal_A=TablaCerrada(20011, dispersionA, exploracion_lineal)
-    total_colisiones_cerrada_lineal_A=insertar_datos_y_contar_colisiones(tabla_cerrada_lineal_A, datos)
-    print(f"Total colisiones Tabla Cerrada Dispersion A Lineal: {total_colisiones_cerrada_lineal_A}")
+    total_colisiones_cerrada_lineal_A=insertar_datos_y_contar_colisiones
+    (tabla_cerrada_lineal_A, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion A Lineal:"
+          f"{total_colisiones_cerrada_lineal_A}")
     #A Cuadratica
-    tabla_cerrada_cuadratica_A=TablaCerrada(20011, dispersionA, exploracion_cuadratica)
-    total_colisiones_cerrada_cuadratica_A=insertar_datos_y_contar_colisiones(tabla_cerrada_cuadratica_A, datos)
-    print(f"Total colisiones Tabla Cerrada Dispersion A Cuadratica: {total_colisiones_cerrada_cuadratica_A}")
+    tabla_cerrada_cuadratica_A=TablaCerrada(20011, dispersionA, 
+                                            exploracion_cuadratica)
+    total_colisiones_cerrada_cuadratica_A=insertar_datos_y_contar_colisiones
+    (tabla_cerrada_cuadratica_A, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion A Cuadratica: "
+          f"{total_colisiones_cerrada_cuadratica_A}")
     #A Doble
     tabla_cerrada_doble_A=TablaCerrada(20011, dispersionA, exploracion_doble)
-    total_colisiones_cerrada_doble_A=insertar_datos_y_contar_colisiones(tabla_cerrada_doble_A, datos)
-    print(f"Total colisiones Tabla Cerrada Dispersion A Doble: {total_colisiones_cerrada_doble_A}")
+    total_colisiones_cerrada_doble_A=insertar_datos_y_contar_colisiones
+    (tabla_cerrada_doble_A, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion A Doble: "
+          f"{total_colisiones_cerrada_doble_A}")
     print()
     return tabla_cerrada_lineal_A, tabla_cerrada_cuadratica_A, tabla_cerrada_doble_A
 
 def conteos_tabla_cerrada_disp_B(datos: list[tuple[str, str]]):
     #B Lineal
     tabla_cerrada_lineal_B=TablaCerrada(20011, dispersionB, exploracion_lineal)
-    total_colisiones_cerrada_lineal_B=insertar_datos_y_contar_colisiones(tabla_cerrada_lineal_B, datos)
-    print(f"Total colisiones Tabla Cerrada Dispersion B Lineal: {total_colisiones_cerrada_lineal_B}")
+    total_colisiones_cerrada_lineal_B=insertar_datos_y_contar_colisiones
+    (tabla_cerrada_lineal_B, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion B Lineal:"
+          f"{total_colisiones_cerrada_lineal_B}")
     #B Cuadratica
-    tabla_cerrada_cuadratica_B=TablaCerrada(20011, dispersionB, exploracion_cuadratica)
-    total_colisiones_cerrada_cuadratica_B=insertar_datos_y_contar_colisiones(tabla_cerrada_cuadratica_B, datos)
-    print(f"Total colisiones Tabla Cerrada Dispersion B Cuadratica: {total_colisiones_cerrada_cuadratica_B}")
+    tabla_cerrada_cuadratica_B=TablaCerrada(20011, dispersionB,
+                                             exploracion_cuadratica)
+    total_colisiones_cerrada_cuadratica_B=insertar_datos_y_contar_colisiones
+    (tabla_cerrada_cuadratica_B, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion B Cuadratica: "
+          f"{total_colisiones_cerrada_cuadratica_B}")
     #B Doble
     tabla_cerrada_doble_B=TablaCerrada(20011, dispersionB, exploracion_doble)
-    total_colisiones_cerrada_doble_B=insertar_datos_y_contar_colisiones(tabla_cerrada_doble_B, datos)
-    print(f"Total colisiones Tabla Cerrada Dispersion B Doble: {total_colisiones_cerrada_doble_B}")
+    total_colisiones_cerrada_doble_B=insertar_datos_y_contar_colisiones
+    (tabla_cerrada_doble_B, datos)
+    print(f"Total colisiones Tabla Cerrada Dispersion B Doble:"
+          f"{total_colisiones_cerrada_doble_B}")
     print()
     return tabla_cerrada_lineal_B, tabla_cerrada_cuadratica_B, tabla_cerrada_doble_B
 ##Calculos de eficiencia punto 4
@@ -290,7 +324,8 @@ def conteos_tabla_cerrada_disp_B(datos: list[tuple[str, str]]):
 def microsegundos() -> int: #Esta función la hemos usado creo que en todas las prácticas
     return time.perf_counter_ns() // 1000
 
-def generar_claves_aleatorias(datos_completos: list[tuple[str, str]], n: int) -> list[str]: 
+def generar_claves_aleatorias(datos_completos: list[tuple[str, str]], 
+                              n: int) -> list[str]: 
     """
     Selecciona n claves aleatorias del conjunto completo de 19062 claves para ser buscadas.
     """
@@ -307,7 +342,8 @@ def wrapper_busqueda(tabla, claves_a_buscar: list[str]) -> int:
         total_colisiones += colisiones
     return total_colisiones 
 
-def _medir_tiempo_busqueda_aux(tabla, claves_a_buscar: list[str], K: int = 1000) -> tuple[float, str, int]:
+def _medir_tiempo_busqueda_aux(tabla, claves_a_buscar: list[str],
+                                K: int = 1000) -> tuple[float, str, int]:
     """
     Mide el tiempo de buscar n claves en la tabla, con corrección K.
     Retorna (tiempo_µs, marca, colisiones_promedio)
@@ -337,7 +373,8 @@ def _medir_tiempo_busqueda_aux(tabla, claves_a_buscar: list[str], K: int = 1000)
 def medir_tiempo_busqueda(tabla_llena, 
                            datos_completos: list[tuple[str, str]],
                            muestra_inicial: int,
-                           muestras: int, factor: int = 2) -> dict[int, tuple[float, str, int]]:
+                           muestras: int, factor: int = 2
+                           ) -> dict[int, tuple[float, str, int]]:
     
     """
     Mide el tiempo total de buscar n elementos (y cuenta las colisiones)
@@ -383,8 +420,10 @@ def mostrar_tiempo_busqueda(alg_name: str,
     print()
     print(f"*** {alg_name} ***")
     
-    header = (f"{'n':>8} {'t(n)[µs]':>14} {'t(n)/n^0.8':>14}"
-              f"{'t(n)/n':>14} {'t(n)/n^1.2':>14} {'Colisiones':>14}")
+    header = (
+        f"{'n':>8} {'t(n)[µs]':>14} {'t(n)/n^0.8':>14}"
+        f"{'t(n)/n':>14} {'t(n)/n^1.2':>14} {'Colisiones':>14}"
+    )
     print(header)
 
     for n, (t_n, signo, colisiones) in v.items():
@@ -394,7 +433,12 @@ def mostrar_tiempo_busqueda(alg_name: str,
         v_1_0 = t_n / n_1_0
         v_1_2 = t_n / n_1_2
         
-        print(f"{signo}{n:8d} {t_n:14.3f} {v_0_8:14.6g} {v_1_0:14.6g} {v_1_2:14.6g} {colisiones:14d}")
+        line = (
+            f"{signo}{n:8d} {t_n:14.3f} "
+            f"{v_0_8:14.6g} {v_1_0:14.6g} "
+            f"{v_1_2:14.6g} {colisiones:14d}"
+        )
+        print(line)
 
     return
     
@@ -402,39 +446,41 @@ def main_complejidad(datos_sinonimos):
     """
     Ejecuta el Punto 4: Mide la complejidad de la búsqueda para las 8 tablas.
     """
-    
     TAM_CERRADA = 38197 #Configuración del tamaño para ambos tipos de tablas
     TAM_ABIERTA = 19069 
     
     configuraciones = [                             
-        (TablaAbierta, TAM_ABIERTA, dispersionA, None, "Tabla Abierta, Disp. A"),
-        (TablaAbierta, TAM_ABIERTA, dispersionB, None, "Tabla Abierta, Disp. B"),
+        (TablaAbierta, TAM_ABIERTA, dispersionA, None,
+          "Tabla Abierta, Disp. A"),
+        (TablaAbierta, TAM_ABIERTA, dispersionB, None,
+          "Tabla Abierta, Disp. B"),
         
-        (TablaCerrada, TAM_CERRADA, dispersionA, exploracion_lineal, "Tabla Cerrada, Disp. A, Lineal"),
-        (TablaCerrada, TAM_CERRADA, dispersionB, exploracion_lineal, "Tabla Cerrada, Disp. B, Lineal"),
+        (TablaCerrada, TAM_CERRADA, dispersionA, exploracion_lineal,
+          "Tabla Cerrada, Disp. A, Lineal"),
+        (TablaCerrada, TAM_CERRADA, dispersionB, exploracion_lineal,
+          "Tabla Cerrada, Disp. B, Lineal"),
         
-        (TablaCerrada, TAM_CERRADA, dispersionA, exploracion_cuadratica, "Tabla Cerrada, Disp. A, Cuadrática"),
-        (TablaCerrada, TAM_CERRADA, dispersionB, exploracion_cuadratica, "Tabla Cerrada, Disp. B, Cuadrática"),
+        (TablaCerrada, TAM_CERRADA, dispersionA, exploracion_cuadratica,
+          "Tabla Cerrada, Disp. A, Cuadrática"),
+        (TablaCerrada, TAM_CERRADA, dispersionB, exploracion_cuadratica,
+          "Tabla Cerrada, Disp. B, Cuadrática"),
         
-        (TablaCerrada, TAM_CERRADA, dispersionA, exploracion_doble, "Tabla Cerrada, Disp. A, Doble"),
-        (TablaCerrada, TAM_CERRADA, dispersionB, exploracion_doble, "Tabla Cerrada, Disp. B, Doble"),
+        (TablaCerrada, TAM_CERRADA, dispersionA, exploracion_doble,
+          "Tabla Cerrada, Disp. A, Doble"),
+        (TablaCerrada, TAM_CERRADA, dispersionB, exploracion_doble,
+          "Tabla Cerrada, Disp. B, Doble"),
     ]
     
     resultados_compilados = {} # Guardará los resultados de medir_tiempo_busqueda
         
-    for ClaseTabla, tam, disp_func, resol_func, nombre_test in configuraciones:
-        
+    for ClaseTabla, tam, disp_func, resol_func, nombre_test in configuraciones: 
         print(f"\nConstruyendo tabla: {nombre_test}...")
-        
         if resol_func is None:
             tabla_llena = ClaseTabla(tam, disp_func)
         else:
-            tabla_llena = ClaseTabla(tam, disp_func, resol_func)
-            
-        _ = insertar_datos_y_contar_colisiones(tabla_llena, datos_sinonimos)
-        
+            tabla_llena = ClaseTabla(tam, disp_func, resol_func) 
+        _ = insertar_datos_y_contar_colisiones(tabla_llena, datos_sinonimos)#Esta asignación es solo para llenar la tabla y no usar el valor devuelto
         print(f"Midiendo tiempo de búsqueda para {nombre_test}...")#Tan solo una pequeña pijada estética
-        
 
         tiempos_medidos = medir_tiempo_busqueda(
             tabla_llena, 
@@ -443,11 +489,8 @@ def main_complejidad(datos_sinonimos):
             muestras=8,
             factor=2
         )
-        
         mostrar_tiempo_busqueda(nombre_test, tiempos_medidos)
-        
         #resultados_compilados[nombre_test] = tiempos_medidos #Si quisiera guardar los resultados para usarlos luego, pero no hace falta. Lo hice sin pensarlo
-
     print("\nAnálisis de Complejidad Finalizado.")
     return
 
@@ -465,5 +508,5 @@ if __name__ == "__main__":
         print(f"\n--- Medición de tiempos de búsqueda, iteración {i+1} ---")
         main_complejidad(datos)
         i+=1
+    print("\n--- Fin de la práctica ---")
     pass #Creo que es la práctica entre entender conceptos y programar que más tiempo me ha llevado.     
-
