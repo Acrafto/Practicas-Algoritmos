@@ -1,0 +1,240 @@
+Práctica 4: Diccionario de Datos (Tablas de Dispersión)
+-----------------------------------------------------------------------------
+										11/12/2025
+
+Grupo:
+Sebastián David Moreno Expósito, Álvaro Gómez García y Xoel Sánchez Dacoba
+
+Sujeto de Análisis:
+Implementación de Diccionarios mediante Tablas de Dispersión (Abierta y Cerrada)
+y comparación de funciones de dispersión (Suma ASCII vs Desplazamiento de bits).
+
+------------------------------------------------------------------------
+
+
+e1.
+INTRODUCCIÓN
+------------------------------------------------------------
+En esta práctica se ha implementado un programa de consulta de sinónimos utilizando
+diferentes estructuras de Tablas de Dispersión (Hash Tables). Se han insertado 
+19.062 entradas desde el archivo 'sinonimos.txt'.
+
+El objetivo es comparar empíricamente:
+1. Dos funciones de dispersión:
+   - DispersionA: Suma de valores ASCII (limitada a 8 caracteres).
+   - DispersionB: Desplazamiento de bits (multiplicar por 32) + suma ASCII.
+   
+2. Dos tipos de tablas:
+   - Tabla Abierta: Resolución de colisiones mediante encadenamiento (listas).
+     Factor de carga aprox: 1.0 (N=19069).
+   - Tabla Cerrada: Resolución mediante exploración (Lineal, Cuadrática, Doble).
+     Factor de carga aprox: 0.5 (N=38197).
+
+Se analiza la eficiencia en términos de número de colisiones (inserción y búsqueda)
+y tiempos de ejecución para búsquedas de n elementos aleatorios.
+
+
+e3.
+CARACTERÍSTICAS DE LA MÁQUINA
+------------------------------------------------------------
+El entorno físico de análisis se trata de un ordenador personal(PC) de las siguientes características:
+
+CPU:AMD Ryzen 5 3600X 6-Core Processor
+GPU:NVIDIA GeForce RTX 2060
+RAM:32GB
+SO: Windows 10 home version 22H2 (compilación 10.0.19045)
+
+El entorno virtual es el lenguaje Python en su versión 3.13.9
+
+
+e4.
+UNIDADES DE TIEMPO
+------------------------------------------------------------
+Los tiempos se expresan en **microsegundos (µs)**.
+Se ha utilizado un mecanismo de corrección: si el tiempo total es menor a 
+1000 µs, se repite la medición K=1000 veces para obtener un promedio fiable.
+Dichos valores se indican con un asterisco (*) en las tablas.
+
+
+e5–e6.
+TAMAÑOS DE ENTRADA
+------------------------------------------------------------
+Para el análisis de complejidad de búsqueda, se buscan n elementos aleatorios
+siguiendo una progresión geométrica:
+n = 125, 250, 500, 1000, 2000, 4000, 8000, 16000.
+
+
+e7.
+FORMATO DE LOS DATOS
+------------------------------------------------------------
+Se presentan las siguientes columnas para verificar la complejidad O(n) acumulada:
+- t(n)/n       	  → Cota ajustada esperada (si la búsqueda es O(1) promedio).
+- Colisiones      → Número total de colisiones acumuladas durante las n búsquedas.
+
+
+e8–e11.
+RESULTADOS Y ESTUDIO DE COMPLEJIDAD
+------------------------------------------------------------
+A continuacion de presentan los resultados tanto de las colisiones en la insercion como
+las tablas generadas(Puntos 3 y 4 de la tarea).
+
+-Total colisiones Tabla Abierta Dispersion A: 18559
+-Total colisiones Tabla Abierta Dispersion B: 7476
+
+-Total colisiones Tabla Cerrada Dispersion A Lineal: 172623183
+-Total colisiones Tabla Cerrada Dispersion A Cuadratica: 2575399
+-Total colisiones Tabla Cerrada Dispersion A Doble: 2101924
+
+-Total colisiones Tabla Cerrada Dispersion B Lineal: 522655
+-Total colisiones Tabla Cerrada Dispersion B Cuadratica: 61875
+-Total colisiones Tabla Cerrada Dispersion B Doble: 63846
+
+==================================================
+1. TABLAS DE DISPERSIÓN ABIERTA (Listas Enlazadas)
+==================================================
+
+*** Tabla Abierta, Disp. A ***
+       n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
+* 125        456.587        9.59391         3.6527        1.39069           7866
+      250       1046.000        12.6235          4.184        1.38677          14527
+      500       2051.000        14.2164          4.102        1.18359          32815
+     1000       3646.000         14.515          3.646       0.915834          60432
+     2000       7245.000        16.5659         3.6225       0.792141         119939
+     4000      14858.000        19.5125         3.7145       0.707112         252206
+     8000      30163.000        22.7511        3.77038       0.624837         500108
+    16000      58500.000        25.3431        3.65625       0.527487         996501
+
+*** Tabla Abierta, Disp. B ***
+       n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
+*     125        124.184        2.60938       0.993472       0.378245             77
+*     250        249.443        3.01037       0.997772       0.330707            156
+*     500        508.570        3.52513        1.01714       0.293486            338
+     1000       1219.000        4.85293          1.219       0.306199            630
+     2000       2331.000        5.32989         1.1655       0.254863           1252
+     4000       4419.000        5.80331        1.10475       0.210306           2528
+     8000       8458.000        6.37963        1.05725        0.17521           4976
+    16000      16694.000         7.2321        1.04337       0.150528           9925
+
+
+==============================================================
+2. TABLAS DE DISPERSIÓN CERRADA (Lineal, Cuadrática, Doble)
+==============================================================
+
+--- BLOQUE A: DISPERSIÓN A (Suma ASCII - Mala distribución) ---
+
+*** Tabla Cerrada, Disp. A, Lineal ***
+       n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
+      125     198983.000        4181.08        1591.86        606.072        1184737
+      250     368527.000        4447.51        1474.11        488.586        2196565
+      500     752588.000        5216.52        1505.18        434.303        4501325
+     1000    1480640.000        5894.53        1480.64         371.92        8847907
+     2000    3095496.000        7077.93        1547.75         338.45       18529799
+     4000    6147270.000        8072.99        1536.82        292.557       36545770
+     8000   12514925.000        9439.66        1564.37        259.251       72766951
+    16000   25104770.000        10875.8        1569.05        226.367      144866970
+
+*** Tabla Cerrada, Disp. A, Cuadrática ***
+       n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
+      125       3054.000        64.1713         24.432        9.30201          13716
+      250       6057.000         73.098         24.228        8.03026          26987
+      500      13042.000           90.4         26.084        7.52628          56777
+     1000      23798.000        94.7415         23.798        5.97779         106535
+     2000      48231.000        110.281        24.1155        5.27339         219220
+     4000      96817.000        127.146        24.2042        4.60765         440485
+     8000     194382.000        146.617        24.2978        4.02669         884273
+    16000     388135.000        168.146        24.2584        3.49976        1765272
+
+*** Tabla Cerrada, Disp. A, Doble ***
+       n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
+      125       2425.000        50.9546           19.4        7.38618           9001
+      250       5115.000        61.7296          20.46        6.78137          19255
+      500      10339.000        71.6642         20.678        5.96643          38805
+     1000      21014.000        83.6582         21.014        5.27848          78578
+     2000      40476.000        92.5494         20.238        4.42549         152614
+     4000      78979.000         103.72        19.7447        3.75872         301397
+     8000     161900.000        122.117        20.2375        3.35381         613491
+    16000     316554.000        137.136        19.7846        2.85433        1211143
+
+
+--- BLOQUE B: DISPERSIÓN B (Desplazamiento bits - Buena distribución) ---
+
+*** Tabla Cerrada, Disp. B, Lineal ***
+       n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
+*     125        195.369        4.10514        1.56295       0.595064             95
+*     250        313.049        3.77799         1.2522       0.415035            235
+*     500        646.578        4.48172        1.29316       0.373127            510
+     1000       1447.000        5.76061          1.447        0.36347            702
+     2000       2808.000        6.42056          1.404       0.307016           1638
+     4000       5401.000        7.09294        1.35025       0.257041           3037
+     8000      10531.000        7.94324        1.31638       0.218153           6406
+    16000      21120.000        9.14951           1.32       0.190436          12844
+
+*** Tabla Cerrada, Disp. B, Cuadrática ***
+       n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
+*     125        152.384        3.20193        1.21907       0.464138             72
+*     250        322.449        3.89143         1.2898       0.427497            214
+*     500        631.699        4.37859         1.2634       0.364541            299
+     1000       1477.000        5.88004          1.477       0.371006            612
+     2000       2824.000        6.45715          1.412       0.308765           1216
+     4000       5481.000          7.198        1.37025       0.260848           2553
+     8000      10749.000        8.10767        1.34363       0.222669           5044
+    16000      21611.000        9.36222        1.35069       0.194864          10119
+
+*** Tabla Cerrada, Disp. B, Doble ***
+       n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
+*     125        176.817        3.71532        1.41454       0.538557            132
+*     250        358.072        4.32134        1.43229       0.474725            282
+*     500        692.670        4.80121        1.38534       0.399726            440
+     1000       1618.000        6.44137          1.618       0.406423            908
+     2000       3174.000        7.25743          1.587       0.347033           1886
+     4000       6099.000         8.0096        1.52475        0.29026           3708
+     8000      11967.000        9.02637        1.49588         0.2479           7695
+    16000      23385.000        10.1307        1.46156        0.21086          14928
+
+
+e12.
+OBSERVACIONES SOBRE COLISIONES AL INSERTAR
+------------------------------------------------------------
+Para garantizar la fiabilidad de las mediciones temporales, se ha utilizado la función
+de alta precisión time.perf_counter_ns().
+
+Se han seguido los siguientes criterios para el tratamiento de datos:
+• Los tiempos de ejecución menores al umbral de confianza (1000 µs) han sido
+  marcados con un asterisco (*) en las tablas.
+• En dichos casos, el algoritmo de medición aplicó automáticamente una corrección
+  basada en la repetición del experimento (K=1000 veces) para obtener un tiempo
+  promedio estable y reducir el error de cuantización del reloj.
+• No se observaron tiempos negativos ni desviaciones irregulares significativas
+  durante la ejecución de las pruebas.
+• Las mediciones se realizaron en un entorno controlado, minimizando la carga
+  del sistema operativo para evitar picos de tiempo ajenos al algoritmo.
+
+
+e2.
+CONCLUSIONES
+------------------------------------------------------------
+A partir de los resultados empíricos, se responde a las cuestiones planteadas:
+
+4. ¿Se obtiene O(n) en todos los casos?
+   Sí, la columna 't(n)/n' se mantiene aproximadamente constante en todas las
+   configuraciones eficientes (valores entre 1.0 y 1.6 µs por elemento).
+   Esto confirma que el tiempo total de búsqueda crece linealmente con n,
+   lo que implica que la búsqueda individual promedio es O(1).
+   
+   Incluso en el caso patológico (Cerrada Lineal con Disp. A), la complejidad
+   sigue siendo lineal t(n) ≈ C·n, pero con una constante C extremadamente alta
+   (≈ 1500 µs por elemento) debido a las colisiones.
+
+5.1. Comparación de Funciones de Dispersión (A vs B):
+   La Dispersion B (desplazamiento de bits) es muy superior. La Dispersion A
+   (suma ASCII) provoca un número inaceptable de colisiones en tablas cerradas,
+   haciendo inviable la exploración lineal.
+
+5.2. Comparación de Diccionarios (Abierta vs Cerrada):
+   - La Tabla Abierta con Dispersion B ofrece el mejor rendimiento temporal
+     y el menor número de colisiones, aunque requiere memoria extra para punteros.
+   - En Tablas Cerradas, las exploraciones Cuadrática y Doble son mucho más
+     robustas ante dispersiones pobres como la Lineal, ofreciendo tiempos de
+     búsqueda muy competitivos cercanos a la Tabla Abierta.
+
+
