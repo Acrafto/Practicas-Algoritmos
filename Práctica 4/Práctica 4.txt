@@ -51,7 +51,7 @@ e4.
 UNIDADES DE TIEMPO
 ------------------------------------------------------------
 Los tiempos se expresan en **microsegundos (µs)**.
-Se ha utilizado un mecanismo de corrección: si el tiempo total es menor a 
+Se ha utilizado un mecanismo de corrección: si el tiempo total es menor a
 1000 µs, se repite la medición K=1000 veces para obtener un promedio fiable.
 Dichos valores se indican con un asterisco (*) en las tablas.
 
@@ -70,23 +70,24 @@ FORMATO DE LOS DATOS
 Se presentan las siguientes columnas para verificar la complejidad O(n) acumulada:
 - t(n)/n       	  → Cota ajustada esperada (si la búsqueda es O(1) promedio).
 - Colisiones      → Número total de colisiones acumuladas durante las n búsquedas.
+Cada una de ellas tienen una precision de al menos tres cifras significativas
 
 
 e8–e11.
 RESULTADOS Y ESTUDIO DE COMPLEJIDAD
 ------------------------------------------------------------
-A continuacion de presentan los resultados tanto de las colisiones en la insercion como
+A continuación de presentan los resultados tanto de las colisiones en la inserción como
 las tablas generadas(Puntos 3 y 4 de la tarea).
 
 -Total colisiones Tabla Abierta Dispersion A: 18559
 -Total colisiones Tabla Abierta Dispersion B: 7476
 
 -Total colisiones Tabla Cerrada Dispersion A Lineal: 172623183
--Total colisiones Tabla Cerrada Dispersion A Cuadratica: 2575399
+-Total colisiones Tabla Cerrada Dispersion A Cuadrática: 2575399
 -Total colisiones Tabla Cerrada Dispersion A Doble: 2101924
 
 -Total colisiones Tabla Cerrada Dispersion B Lineal: 522655
--Total colisiones Tabla Cerrada Dispersion B Cuadratica: 61875
+-Total colisiones Tabla Cerrada Dispersion B Cuadrática: 61875
 -Total colisiones Tabla Cerrada Dispersion B Doble: 63846
 
 ==================================================
@@ -95,7 +96,7 @@ las tablas generadas(Puntos 3 y 4 de la tarea).
 
 *** Tabla Abierta, Disp. A ***
        n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
-* 125        456.587        9.59391         3.6527        1.39069           7866
+*     125        456.587        9.59391         3.6527        1.39069           7866
       250       1046.000        12.6235          4.184        1.38677          14527
       500       2051.000        14.2164          4.102        1.18359          32815
      1000       3646.000         14.515          3.646       0.915834          60432
@@ -103,6 +104,9 @@ las tablas generadas(Puntos 3 y 4 de la tarea).
      4000      14858.000        19.5125         3.7145       0.707112         252206
      8000      30163.000        22.7511        3.77038       0.624837         500108
     16000      58500.000        25.3431        3.65625       0.527487         996501
+
+Cota subestimada: n^0.8    Cota ajustada: n^1    Cota sobreestimada: n^1.2
+Constante a la que tiende la cota ajustada c ≈ 3.79354
 
 *** Tabla Abierta, Disp. B ***
        n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
@@ -115,6 +119,8 @@ las tablas generadas(Puntos 3 y 4 de la tarea).
      8000       8458.000        6.37963        1.05725        0.17521           4976
     16000      16694.000         7.2321        1.04337       0.150528           9925
 
+Cota subestimada: n^0.8    Cota ajustada: n^1    Cota sobreestimada: n^1.2
+Constante a la que tiende la cota ajustada c ≈ 1.07478
 
 ==============================================================
 2. TABLAS DE DISPERSIÓN CERRADA (Lineal, Cuadrática, Doble)
@@ -133,6 +139,9 @@ las tablas generadas(Puntos 3 y 4 de la tarea).
      8000   12514925.000        9439.66        1564.37        259.251       72766951
     16000   25104770.000        10875.8        1569.05        226.367      144866970
 
+Cota subestimada: n^0.8    Cota ajustada: n^1    Cota sobreestimada: n^1.2
+Constante a la que tiende la cota ajustada c ≈ 1533.7225
+
 *** Tabla Cerrada, Disp. A, Cuadrática ***
        n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
       125       3054.000        64.1713         24.432        9.30201          13716
@@ -143,6 +152,9 @@ las tablas generadas(Puntos 3 y 4 de la tarea).
      4000      96817.000        127.146        24.2042        4.60765         440485
      8000     194382.000        146.617        24.2978        4.02669         884273
     16000     388135.000        168.146        24.2584        3.49976        1765272
+
+Cota subestimada: n^0.8    Cota ajustada: n^1    Cota sobreestimada: n^1.2
+Constante a la que tiende la cota ajustada c ≈ 24.42724
 
 *** Tabla Cerrada, Disp. A, Doble ***
        n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
@@ -155,6 +167,8 @@ las tablas generadas(Puntos 3 y 4 de la tarea).
      8000     161900.000        122.117        20.2375        3.35381         613491
     16000     316554.000        137.136        19.7846        2.85433        1211143
 
+Cota subestimada: n^0.8    Cota ajustada: n^1    Cota sobreestimada: n^1.2
+Constante a la que tiende la cota ajustada c ≈ 20.1946
 
 --- BLOQUE B: DISPERSIÓN B (Desplazamiento bits - Buena distribución) ---
 
@@ -169,6 +183,9 @@ las tablas generadas(Puntos 3 y 4 de la tarea).
      8000      10531.000        7.94324        1.31638       0.218153           6406
     16000      21120.000        9.14951           1.32       0.190436          12844
 
+Cota subestimada: n^0.8    Cota ajustada: n^1    Cota sobreestimada: n^1.2
+Constante a la que tiende la cota ajustada c ≈ 1.36824
+
 *** Tabla Cerrada, Disp. B, Cuadrática ***
        n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
 *     125        152.384        3.20193        1.21907       0.464138             72
@@ -179,6 +196,9 @@ las tablas generadas(Puntos 3 y 4 de la tarea).
      4000       5481.000          7.198        1.37025       0.260848           2553
      8000      10749.000        8.10767        1.34363       0.222669           5044
     16000      21611.000        9.36222        1.35069       0.194864          10119
+
+Cota subestimada: n^0.8    Cota ajustada: n^1    Cota sobreestimada: n^1.2
+Constante a la que tiende la cota ajustada c ≈ 1.34073
 
 *** Tabla Cerrada, Disp. B, Doble ***
        n       t(n)[µs]     t(n)/n^0.8        t(n)/n     t(n)/n^1.2     Colisiones
@@ -191,6 +211,8 @@ las tablas generadas(Puntos 3 y 4 de la tarea).
      8000      11967.000        9.02637        1.49588         0.2479           7695
     16000      23385.000        10.1307        1.46156        0.21086          14928
 
+Cota subestimada: n^0.8    Cota ajustada: n^1    Cota sobreestimada: n^1.2
+Constante a la que tiende la cota ajustada c ≈ 1.48992
 
 e12.
 OBSERVACIONES SOBRE COLISIONES AL INSERTAR
