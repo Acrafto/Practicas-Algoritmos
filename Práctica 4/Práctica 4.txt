@@ -16,14 +16,14 @@ e1.
 INTRODUCCIÓN
 ------------------------------------------------------------
 En esta práctica se ha implementado un programa de consulta de sinónimos utilizando
-diferentes estructuras de Tablas de Dispersión (Hash Tables). Se han insertado 
+diferentes estructuras de Tablas de Dispersión (Hash Tables). Se han insertado
 19.062 entradas desde el archivo 'sinonimos.txt'.
 
 El objetivo es comparar empíricamente:
 1. Dos funciones de dispersión:
    - DispersionA: Suma de valores ASCII (limitada a 8 caracteres).
    - DispersionB: Desplazamiento de bits (multiplicar por 32) + suma ASCII.
-   
+
 2. Dos tipos de tablas:
    - Tabla Abierta: Resolución de colisiones mediante encadenamiento (listas).
      Factor de carga aprox: 1.0 (N=19069).
@@ -220,7 +220,7 @@ A partir de los resultados empíricos, se responde a las cuestiones planteadas:
    configuraciones eficientes (valores entre 1.0 y 1.6 µs por elemento).
    Esto confirma que el tiempo total de búsqueda crece linealmente con n,
    lo que implica que la búsqueda individual promedio es O(1).
-   
+
    Incluso en el caso patológico (Cerrada Lineal con Disp. A), la complejidad
    sigue siendo lineal t(n) ≈ C·n, pero con una constante C extremadamente alta
    (≈ 1500 µs por elemento) debido a las colisiones.
