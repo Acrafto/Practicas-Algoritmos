@@ -9,7 +9,7 @@ import time
 TAM_CERRADA = 38197
 TAM_ABIERTA = 19069
 
-##Importación de datos
+#Importación de datos
 def leer_sinonimos(nombre="sinonimos.txt"):
     datos = []
     with open(nombre, "r", encoding="utf-8") as f:
