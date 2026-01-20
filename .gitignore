@@ -1,2 +1,4 @@
 # Ignorar la carpeta enunciados_practicas
 /enunciados_practicas/
+.DS_Store
+.gitignore
